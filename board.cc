@@ -246,7 +246,7 @@ void Board::removeTile(pair<int, int> tileCoords) {
     else addTile(' ', {tileCoords.first, tileCoords.second}); // white Tiles
 }
 
-// Moves the Tile at "from" on the Board to "to" on the Board, returns true if successful
+// Moves the Tile at "from" on the Board to "to" on the Board, returns a symbol indicating the type of move or if the move has failed
 char Board::makeMove(pair<int, int> from, pair<int, int> to) {
     // reset the justMoved2 field for all pawns
     vector<Tile*> activePieces = (currTurn % 2 == 0) ? getActiveWhite() : getActiveBlack();
@@ -355,8 +355,6 @@ char Board::makeMove(pair<int, int> from, pair<int, int> to) {
     // replace the Tile at "from" with an empty Tile
     if ((from.first % 2) == (from.second % 2)) addTile('_', from); // empty black Tile
     else addTile(' ', from); // empty white Tile
-
-    ++currTurn;
     
     return removedTile;
 }
@@ -364,6 +362,9 @@ char Board::makeMove(pair<int, int> from, pair<int, int> to) {
 // Moves the Tile at "from" on the Board to "to" on the Board and replaces that new Tile with "promoSymbol", returns true if successful
 char Board::makeMove(pair<int, int> from, pair<int, int> to, char promoSymbol) {
     // use previous makeMove for efficiency
+    if ((((currTurn % 2) == 0) && ((to.second != 7) || (islower(promoSymbol)) || (promoSymbol == 'K'))) || (((currTurn % 2) == 1) && ((to.second != 0) || (isupper(promoSymbol)) || (promoSymbol == 'k')))) // checks if the promotion is happening at one of the ends of the board
+        return 'X';
+
     char removedTile = makeMove(from, to);
     if (removedTile != 'X') {
         // replace the new Piece at "to" with a new symbol

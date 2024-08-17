@@ -9,8 +9,6 @@
 #include "text.h"
 #include "window.h"
 
-
-
 class Game {
 	Player *whitePlayer;
 	Player *blackPlayer;

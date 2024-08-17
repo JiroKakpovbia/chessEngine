@@ -16,25 +16,7 @@ Player *&Game::getPlayer(int playerNum) {
 
 Game::Game (Player *white, Player *black, Xwindow *window): whitePlayer{white}, blackPlayer{black}, board{new Board}, history{new History}, studio{new Studio{board}}, window{window} {
 	cout << "____________________________________________________________________" << endl;
-	cout << endl << "Welcome to Chess! Please choose from the following commands:" << endl;
-	cout << "'game <white-player> <black-player>' starts a new game. The parameters <white-player> and <black-player> can be either human or computer[1-4]." << endl;
-	cout << "	eg. 'game human computer2' starts a game with the White player being Human and the Black player being a computer." << endl;
-	cout << "'resign' concedes the game to your opponent. This is the only way, outside of winning or drawing the game, to end a game." << endl;
-	cout << "'move <start> <end>' moves one of the pieces on the board. The parameters <start> and <end> specify the starting and ending coordinates of the piece to be moved." << endl;
-	cout << "	eg. 'move e2 e4' moves the piece on e2 to e4" << endl;
-	cout << "	Castling would specified by the two-square move for the king." << endl;
-	cout << "		eg. 'move e1 g1' (right castle) or 'move e1 c1' (left castle) for white." << endl;
-	cout << "	Pawn promotion would additionally specify the piece type to which the pawn is promoted." << endl;
-	cout << "		eg. 'move e7 e8 Q' moves a Pawn from e7 to e8 (the other end of the board), and subsequently makes it a Queen" << endl;
-	cout << "	In the case of a computer player, the command move (without arguments) makes the computer player make a move" << endl;
-	cout << "'setup' enters setup mode, within which you can set up your own initial board configurations. This can only be done when a game is not currently running. Within setup mode, the following language is used:" << endl;
-	cout << "	'+ <piece> <square>' places the piece onto the board. Specifically, it places <piece> onto <square>. If a piece is already on that square, it is replaced." << endl;
-	cout << "		eg. '+ K e1' places the piece K (i.e., white king in this case) on the square e1" << endl;
-	cout << "	'- <square>' removes the piece from the parameter <square>. If there is no piece at that square, nothing happens." << endl;
-	cout << "		eg. '- e1' remvoes the piece from e1" << endl;
-	cout << "	'= <colour>' makes it colour’s turn to go next." << endl;
-	cout << "		eg. '= black' makes it the Black player's turn to go next." << endl << endl;
-	cout << "***Remember*** White Pieces = UPPERCASE, Black Pieces = lowercase" << endl;
+	cout << endl << "Welcome to Chess! Please enter a game mode:" << endl;
 	cout << "____________________________________________________________________" << endl;
 	
 	Text *textScreen = new Text{studio};
@@ -79,13 +61,12 @@ void Game::simplePrint(std::pair<int, int> beg, std::pair<int, int> end) {
 void Game::startGame() {
 	while (!board->checkMate() && !board->staleMate()) {
 		if (board->getCurrTurn() % 2 == 0) // White's turn
-			cout << endl << "White's Turn: " << endl;
+			cout << endl << "White's Turn: ";
 		else 
-			cout << endl << "Black's Turn: " << endl;
+			cout << endl << "Black's Turn: ";
 
 		//this will determine who is the current player and get their move from them
 		std::vector<string> input;
-
 
 		if(board->getCurrTurn()%2 == 0) {
 			input = whitePlayer->getMove(*board);
@@ -152,11 +133,12 @@ void Game::startGame() {
 				continue;
 			}
 
-
 			if (returned == 'e' || returned == 'E') {
 				studio->attach(obs.at(beg.second * 8 + end.first - beg.first * 2 + 1));
+							// add other tiles
 				simplePrint(beg, end);
 				studio->detach(obs.at(beg.second * 8 + end.first - beg.first * 2 + 1));
+							// add other tiles
 			} else if (returned == 'c' || returned == 'C') {
 				if (beg.first > end.first) {
 					//short castle
@@ -176,26 +158,26 @@ void Game::startGame() {
 			} else {
 				simplePrint(beg, end);
 			}
-			continue;
 		}
 
-		if (input.at(3).size() != 1) {
-			cout << "Improper command: must be a character representation of a pawn promotion" << endl;
-			continue;
+		if (input.size() == 4) {
+			if (input.at(3).size() != 1) {
+				cout << "Improper command: must be a character representation of a pawn promotion" << endl;
+				continue;
+			}
+
+			returned = board->makeMove(beg, end, (input.at(3))[0]);
+			if (returned != 'X') {
+				simplePrint(beg, end);
+				history->addHistory(beg, end, returned, true);
+			} else {
+				cout << "Improper command: move must be legal" << endl;
+				continue;
+			}
 		}
 
-		returned = board->makeMove(beg, end, (input.at(3))[0]);
-		if (returned != 'X') {
-			simplePrint(beg, end);
-			history->addHistory(beg, end, returned, true);
-		} else {
-			cout << "Improper command: move must be legal" << endl;
-			continue;
-			
-		}
-
-    	cout << "____________________________________________________________________" << endl;
 		board->setCurrTurn(board->getCurrTurn() + 1);
+    	cout << "____________________________________________________________________" << endl;
 	}
 
 	if (board->checkMate()) {
