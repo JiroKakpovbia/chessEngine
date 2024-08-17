@@ -1,4 +1,4 @@
-#ifndef _BISHOP_H
+#ifndef _BISHOP_H_
 #define _BISHOP_H_
 
 #include "tile.h"
