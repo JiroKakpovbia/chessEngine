@@ -49,11 +49,11 @@ Game::~Game() {
 }
 
 void Game::simplePrint(pair<int, int> beg, pair<int, int> end) {
-	studio->attach(obs.at(8 * beg.first + beg.second + 1));
-	studio->attach(obs.at(8 * end.first + end.second + 1));
+	studio->attach(obs.at(8 * beg.second + beg.first + 1));
+	studio->attach(obs.at(8 * end.second + end.first + 1));
 	studio->render();
-	studio->detach(obs.at(8 * beg.first + beg.second + 1));
-	studio->detach(obs.at(8 * end.first + end.second + 1));
+	studio->detach(obs.at(8 * beg.second + beg.first + 1));
+	studio->detach(obs.at(8 * end.second + end.first + 1));
 }
 
 void Game::startGame() {
@@ -184,11 +184,12 @@ void Game::startGame() {
 
 			// updating the necessary Tiles on the board
 			if (returned == 'e' || returned == 'E') { // update Tiles involved in en passant
-				studio->attach(obs.at(beg.second * 8 + end.first - beg.first * 2 + 1));
-							// add other tiles
+				studio->attach(obs.at(8 * beg.second + beg.first));
+				studio->attach(obs.at(8 * beg.second + beg.first + 2));
 				simplePrint(beg, end);
-				studio->detach(obs.at(beg.second * 8 + end.first - beg.first * 2 + 1));
-							// add other tiles
+				studio->detach(obs.at(8 * beg.second + beg.first));
+				studio->detach(obs.at(8 * beg.second + beg.first + 2));
+				
 			} else if (returned == 'c' || returned == 'C') { // update Tiles involved in castling
 				if (beg.first > end.first) {
 					// short castle
@@ -248,6 +249,10 @@ void Game::startGame() {
 			window->drawString(400, 400, "White Wins!", Xwindow::Black);
 		}
 	}
+
+
+	// cout << "Start a new game with the command 'game <white-player> <black-player>', or quit by pressing 'Ctrl-D'." << endl;
+	// cin << ""
 }
 
 void Game::setupGame() {
