@@ -31,8 +31,7 @@ class Board {
     Tile* getTile(pair<int, int> tileCoords) const { return theBoard->at(tileCoords.first).at(tileCoords.second); }
     void addTile(char symbol, pair<int, int> tileCoords);
     void removeTile(pair<int, int> tileCoords);
-    char makeMove(pair<int, int> from, pair<int, int> to);
-    char makeMove(pair<int, int> from, pair<int, int> to, char promoSymbol); // makeMove for pawn promotion
+    char makeMove(pair<int, int> from, pair<int, int> to, char promoSymbol = 'x');
     bool inCheck(Board temp);
     bool checkMate();
     bool staleMate();

@@ -7,9 +7,9 @@
 #include "tile.h"
 #include "pawn.h"
 #include "rook.h"
-#include "knight.h" /***/
-#include "bishop.h" /***/
-#include "queen.h" /***/
+#include "knight.h"
+#include "bishop.h"
+#include "queen.h"
 #include "king.h"
 using namespace std;
 
@@ -246,14 +246,18 @@ void Board::removeTile(pair<int, int> tileCoords) {
     else addTile(' ', {tileCoords.first, tileCoords.second}); // white Tiles
 }
 
-// Moves the Tile at "from" on the Board to "to" on the Board, returns true if successful
-char Board::makeMove(pair<int, int> from, pair<int, int> to) {
+// Moves the Tile at "from" on the Board to "to" on the Board and replaces that new Tile with "promoSymbol", returns true if successful
+char Board::makeMove(pair<int, int> from, pair<int, int> to, char promoSymbol) {
+    vector<char> validPromos = ((currTurn % 2) == 0) ? vector{'R', 'N', 'B', 'Q'} : vector{'r', 'n', 'b', 'q'}; // change the pieces depending on the current Player's turn
+    char indicator;
+    bool promo = false;
+
     // reset the justMoved2 field for all pawns
     vector<Tile*> activePieces = (currTurn % 2 == 0) ? getActiveWhite() : getActiveBlack();
     for (unsigned x = 0; x < activePieces.size(); ++x) {
         if ((activePieces[x]->getSymbol() == 'p') || (activePieces[x]->getSymbol() == 'P')) {
             activePieces[x]->setJustMoved2(false);
-         }
+        }
     }
     
     // set all tiles to not moved
@@ -271,7 +275,17 @@ char Board::makeMove(pair<int, int> from, pair<int, int> to) {
 
     // check if the move is invalid
     if (find(pMoves.begin(), pMoves.end(), to) == pMoves.end()) {
-        return 'X'; // failed move indicator
+        return 'X';
+    }
+       
+    // checks if promotion is happening, and if it is invalid
+    if (((to.second == 0) || (to.second == 7)) && ((initialTile == 'P') || (initialTile == 'p'))) {
+        if (find(validPromos.begin(), validPromos.end(), promoSymbol) != validPromos.end()) {
+            promo = true;
+            
+        } else {
+            return 'P';
+        }
     }
 
     // check if the Tile being removed was a Piece
@@ -303,12 +317,12 @@ char Board::makeMove(pair<int, int> from, pair<int, int> to) {
         if (initialTile == 'k' || initialTile == 'K') {
             if (islower(initialTile)) {
                 rook = 'r';
-                removedTile = 'c'; // black castle indicator
+                indicator = 'c'; // black castle indicator
             }
 
             else if (isupper(initialTile)) {
                 rook = 'R';
-                removedTile = 'C'; // white castle indicator
+                indicator = 'C'; // white castle indicator
             }
 
             if (to.first == (from.first + 2)) { // right castle
@@ -338,11 +352,12 @@ char Board::makeMove(pair<int, int> from, pair<int, int> to) {
 
         if (initialTile == 'p') {
             capturedWhite.push_back(getTile({(from.first + direction), from.second}));
-            removedTile = 'e'; // black en passant indicator
+            indicator = 'e'; // black en passant indicator
         }
+        
         else {
             capturedBlack.push_back(getTile({(from.first + direction), from.second}));
-            removedTile = 'E'; // white en passant indicator
+            indicator = 'E'; // white en passant indicator
         }
 
         removeTile({(from.first + direction), from.second});
@@ -355,23 +370,15 @@ char Board::makeMove(pair<int, int> from, pair<int, int> to) {
     // replace the Tile at "from" with an empty Tile
     if ((from.first % 2) == (from.second % 2)) addTile('_', from); // empty black Tile
     else addTile(' ', from); // empty white Tile
-
-    ++currTurn;
     
-    return removedTile;
-}
-
-// Moves the Tile at "from" on the Board to "to" on the Board and replaces that new Tile with "promoSymbol", returns true if successful
-char Board::makeMove(pair<int, int> from, pair<int, int> to, char promoSymbol) {
-    // use previous makeMove for efficiency
-    char removedTile = makeMove(from, to);
-    if (removedTile != 'X') {
+    // promote the Tile at "to" if necessary
+    if (promo) {
         // replace the new Piece at "to" with a new symbol
         removeTile(to);
         addTile(promoSymbol, to);
-        return removedTile;
     }
-    return 'X';
+
+    return indicator;
 }
 
 // Returns true if the Player whose turn it is is in check

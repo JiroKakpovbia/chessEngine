@@ -1,9 +1,6 @@
-#include "human.h"
-#include <string>
 #include <sstream>
-#include <vector>
 #include <iostream>
-#include "board.h"
+#include "human.h"
 
 std::vector<string> Human::getMove(Board &board) {
     string input;
@@ -11,8 +8,10 @@ std::vector<string> Human::getMove(Board &board) {
     std::stringstream tokenize(input);
     std::vector<string> args;
     string arg;
+
     while (getline(tokenize, arg, ' ')) {
         args.push_back(arg);
     }
+    
     return args;
 }

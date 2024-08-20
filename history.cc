@@ -116,7 +116,7 @@ void History::undo(Board *board, Studio *studio, std::vector<Observer *> obs) {
 		studio->detach(obs.at(8 * move.first.second + move.first.first + 1));
 		studio->detach(obs.at(8 * y + x + 1));
 
-	} else if (promo) {//promotion
+	} else if (promo) { // promotion
 		board->makeMove(move.second, move.first);
 		studio->attach(obs.at(8 * move.first.second + move.first.first + 1));
 		studio->attach(obs.at(8 * move.second.second + move.second.first + 1));

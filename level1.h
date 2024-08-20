@@ -1,15 +1,11 @@
 #ifndef _LEVEL1_H_
 #define _LEVEL1_H_
-#include <vector>
-#include <string>
-#include "board.h"
 #include "player.h"
-#include "computer.h"
 using namespace std;
 
-class Level1 : public Computer {
+class Level1 : public Player {
   public:
-    Level1(string colour) : Computer{colour} {};
+    Level1() : Player() {};
     vector<string> getMove(Board &board) override;
 };
 
