@@ -189,7 +189,7 @@ void Game::startGame() {
 				simplePrint(beg, end);
 				studio->detach(obs.at(8 * beg.second + beg.first));
 				studio->detach(obs.at(8 * beg.second + beg.first + 2));
-				
+
 			} else if (returned == 'c' || returned == 'C') { // update Tiles involved in castling
 				if (beg.first > end.first) {
 					// short castle
@@ -257,7 +257,7 @@ void Game::startGame() {
 
 void Game::setupGame() {
 	cout << "Entering setup mode..." << endl;
-	cout << "You may choose from any of the following commands: '+ <piece> <square>', '- <square>', or '= <colour>'." << endl;
+	cout << "You may choose from any of the following commands: '+ <piece> <square>', '- <square>', '= <colour>', or 'clear'." << endl;
 	string input;
 
 	while (getline(cin, input)) {
@@ -279,6 +279,20 @@ void Game::setupGame() {
 				cout << "Invalid board: there must be one of each king, and no pawns in the outer rows." << endl;
 				continue;
 			}
+		} else if (arg1 == "clear") {
+			for (int y = 0; y < board->getBoardSize(); ++y) {
+				for (int x = 0; x < board->getBoardSize(); ++x) {
+					board->removeTile({y,x});
+					studio->attach(obs.at(y + 8 * x + 1));
+				}
+			}
+			studio->render();
+			for (int y = 0; y < board->getBoardSize(); ++y) {
+				for (int x = 0; x < board->getBoardSize(); ++x) {
+					studio->detach(obs.at(y + 8 * x + 1));
+				}
+			}
+			continue;
 		}
 
 		string arg2;
@@ -335,7 +349,6 @@ void Game::setupGame() {
 				cout << "Improper command: no valid player given." << endl;
 				continue;
 			}
-
 		} else {
 			cout << "Improper command: Invalid beginning command or format." << endl;
 		}
