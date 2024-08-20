@@ -17,7 +17,7 @@ Castling would be specified by the two-square move for the king.
 Pawn promotion would additionally specify the piece type to which the pawn is promoted.
   - eg. 'move e7 e8 Q' moves a Pawn from e7 to e8 (the other end of the board), and subsequently makes it a Queen.
 
-In the case of a computer player, the command move (without arguments) makes the computer player make a move.
+In the case of a computer player, the computer will make its move on its own.
 
 'setup' enters setup mode, within which you can set up your own initial board configurations. This can only be done when a game is not currently running. Within setup mode, the following language is used:
 
