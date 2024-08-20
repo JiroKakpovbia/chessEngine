@@ -1,17 +1,11 @@
-#include <vector>
-#include <string>
+// Level2: The computer makes random legal moves, but prioritizes capturing other pieces and putting the opponent in check
+#include <iostream>
 #include <cstdlib>
 #include "level2.h"
-#include "computer.h"
-#include "player.h"
 #include "tile.h"
-#include <iostream>
 using namespace std;
 
 std::vector<string> Level2::getMove(Board &board) {
-    string input;
-    cin >> input;
-
     vector<Tile*> pieces;
     vector<pair<int, int>> moves;
     vector<pair<int, int>> capturesAndChecks;
@@ -19,7 +13,7 @@ std::vector<string> Level2::getMove(Board &board) {
     pair<int, int> fromCoords;
     pair<int, int> toCoords;
 
-    if (getColour() == "white") pieces = board.getActiveWhite(); // the Computer owns the White Pieces
+    if ((board.getCurrTurn() % 2) == 0) pieces = board.getActiveWhite(); // the Computer owns the White Pieces
     else pieces = board.getActiveBlack(); // the Computer owns the Black Pieces
 
     if (pieces.empty()) return vector<string>{"none"};
@@ -95,8 +89,13 @@ std::vector<string> Level2::getMove(Board &board) {
     to += static_cast<char>(toCoords.first + 'a');
     to += to_string(toCoords.second + 1);
 
-    // output the computer's move
-    cout << "Computer moved [" << from << "] to [" << to << "]" << endl;
+    // decide if pawn promotion is available
+    string promo;
+    if (((board.getTile(fromCoords)->getSymbol() == 'P') || (board.getTile(fromCoords)->getSymbol() == 'p')) && ((toCoords.second == 0) || (toCoords.second == 7))) {
+        vector<string> promoOptions{"Q", "R", "B", "N"};
+        int promoChoice = rand() % 4;
+        promo = promoOptions[promoChoice];
+    }
 
-    return vector<string>{input, from, to};
+    return vector<string>{"move", from, to, promo};
 }

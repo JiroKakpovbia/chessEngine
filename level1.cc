@@ -1,23 +1,17 @@
-#include <vector>
-#include <string>
+// Level1: The computer makes random legal moves, regardless of the outcome
+#include <iostream>
 #include <cstdlib>
 #include "level1.h"
-#include "computer.h"
-#include "player.h"
 #include "tile.h"
-#include <iostream>
 using namespace std;
 
 std::vector<string> Level1::getMove(Board &board) {
-    string input;
-    cin >> input;
-
     vector<Tile*> pieces;
     vector<pair<int, int>> moves;
     Tile* fromTile = nullptr;
     pair<int, int> fromCoords;
 
-    if (getColour() == "white") pieces = board.getActiveWhite(); // the Computer owns the White Pieces
+    if ((board.getCurrTurn() % 2) == 0) pieces = board.getActiveWhite(); // the Computer owns the White Pieces
     else pieces = board.getActiveBlack(); // the Computer owns the Black Pieces
 
     if (pieces.empty()) return vector<string>{"none"};
@@ -58,8 +52,14 @@ std::vector<string> Level1::getMove(Board &board) {
     to += static_cast<char>(toCoords.first + 'a');
     to += to_string(toCoords.second + 1);
 
-    // output the computer's move
-    cout << "Computer moved [" << from << "] to [" << to << "]" << endl;
-
-    return vector<string>{input, from, to};
+    // decide if pawn promotion is available
+    string promo;
+    if (((board.getTile(fromCoords)->getSymbol() == 'P') || (board.getTile(fromCoords)->getSymbol() == 'p')) &&
+    ((toCoords.second == 0) || (toCoords.second == 7))) {
+        vector<string> promoOptions{"Q", "R", "B", "N"};
+        int promoChoice = rand() % 4;
+        promo = promoOptions[promoChoice];
+    }
+    
+    return vector<string>{"move", from, to, promo};
 }

@@ -1,12 +1,10 @@
 #ifndef GAME_H_
 #define GAME_H_
+#include <vector>
 #include "player.h"
 #include "history.h"
 #include "board.h"
-#include <vector>
-#include "tile.h"
 #include "studio.h"
-#include "text.h"
 #include "window.h"
 
 class Game {

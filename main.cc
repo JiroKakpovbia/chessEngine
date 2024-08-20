@@ -50,16 +50,16 @@ int main() {
                     if (i == 2) colour = "black";
 
                     if (args.at(i) == "human" ) {
-                        Human *player = new Human{colour};
+                        Human *player = new Human();
                         game.getPlayer(i) = player;
                     } else if (args.at(i) == "computer1") {
-                        Level1 *player = new Level1{colour};
+                        Level1 *player = new Level1();
                         game.getPlayer(i) = player;
                     } else if (args.at(i) == "computer2") {
-                        Level2 *player = new Level2{colour};
+                        Level2 *player = new Level2();
                         game.getPlayer(i) = player;
                     } else if (args.at(i) == "computer3") {
-                        Level3 *player = new Level3{colour};
+                        Level3 *player = new Level3;
                         game.getPlayer(i) = player;
                     }
                 }
