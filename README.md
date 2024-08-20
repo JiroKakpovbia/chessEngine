@@ -19,7 +19,7 @@ Pawn promotion would additionally specify the piece type to which the pawn is pr
 
 In the case of a computer player, the computer will make its move on its own.
 
-'setup' enters setup mode, within which you can set up your own initial board configurations. This can only be done when a game is not currently running. Within setup mode, the following language is used:
+'setup' enters setup mode, within which you can set up your own initial board configurations. This can only be done when a game is not currently running. Within setup mode, the following commands are used:
 
 '+ \<piece\> \<square\>' places the piece onto the board. Specifically, it places \<piece\> onto \<square\>. If a piece is already on that square, it is replaced.
   - eg. '+ K e1' places the piece K (i.e., White king in this case) on the square e1.
@@ -30,6 +30,9 @@ In the case of a computer player, the computer will make its move on its own.
 '= \<colour\>' makes it colour’s turn to go next.
   - eg. '= black' makes it the Black player's turn to go next."
 
+'clear' removes every piece on the board.
+
+'done' exits setup mode.
 
 **Remember:** White pieces = UPPERCASE, Black pieces = lowercase
 
