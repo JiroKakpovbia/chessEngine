@@ -3,9 +3,9 @@
 #include <vector>
 #include "player.h"
 #include "history.h"
-#include "board.h"
 #include "studio.h"
 #include "window.h"
+using namespace std;
 
 class Game {
 	Player *whitePlayer;
@@ -13,13 +13,13 @@ class Game {
 	Board *board;
 	History *history;
 	Studio *studio;
-	std::vector<Observer *> obs;
+	vector<Observer *> obs;
 	Xwindow *window;
 	static inline float whiteWins = 0;
 	static inline float blackWins = 0;
 	void printScore();
 	bool checkValid();
-	void simplePrint(std::pair<int, int> beg, std::pair<int, int> end);
+	void simplePrint(pair<int, int> beg, pair<int, int> end);
 	static inline bool final = false;
 public:
 	Game(Player *white, Player *black, Xwindow *window);

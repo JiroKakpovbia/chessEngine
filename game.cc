@@ -4,7 +4,6 @@
 #include "human.h"
 #include "text.h"
 #include "graphics.h"
-using namespace std;
 
 Player *&Game::getPlayer(int playerNum) {
 	if (playerNum == 1) return whitePlayer;
@@ -12,10 +11,10 @@ Player *&Game::getPlayer(int playerNum) {
 }
 
 Game::Game (Player *white, Player *black, Xwindow *window): whitePlayer{white}, blackPlayer{black}, board{new Board}, history{new History}, studio{new Studio{board}}, window{window} {
-	cout << "____________________________________________________________________" << endl;
+	cout << "______________________________________________________________________" << endl;
 	cout << endl << "Welcome to Chess! Please enter one of the following commands:" << endl;
 	cout << "'setup' or 'game <white-player> <black-player>'." << endl;
-	cout << "____________________________________________________________________" << endl;
+	cout << "______________________________________________________________________" << endl;
 	
 	Text *textScreen = new Text{studio};
 
@@ -23,8 +22,8 @@ Game::Game (Player *white, Player *black, Xwindow *window): whitePlayer{white}, 
 	studio->attach(textScreen);
 	textScreen->notify();
 
-	for (int x = 0; x < 8; ++x) {
-		for (int y = 0; y < 8; ++y) {
+	for (int y = 0; y < 8; ++y) {
+		for (int x = 0; x < 8; ++x) {
 			Graphics *tileScreen = new Graphics{x, y, studio, window};
 			obs.push_back(tileScreen);
 			//studio->attach(tileScreen);
@@ -39,9 +38,11 @@ Game::~Game() {
 	delete whitePlayer;
 	delete blackPlayer;
 	delete studio;
+
 	for (auto it = obs.begin(); it != obs.end(); ++it) {
       delete *it;
   	}
+
 	if (final) {
 		printScore();
 	}
@@ -56,7 +57,7 @@ void Game::simplePrint(pair<int, int> beg, pair<int, int> end) {
 }
 
 void Game::startGame() {
-	cout << "Each turn, you may choose from one of the following commands: 'undo', 'resign', or 'move <start> <end>'." << endl;
+	cout << "Each turn, you may choose from any of the following commands: 'undo', 'resign', or 'move <start> <end>'." << endl;
 
 	Player *currPlayer;
 
@@ -211,7 +212,7 @@ void Game::startGame() {
 		}
 
 		board->setCurrTurn(board->getCurrTurn() + 1);
-    	cout << "____________________________________________________________________" << endl;
+    	cout << "______________________________________________________________________" << endl;
 	}
 
 	if (board->checkMate()) {
@@ -250,6 +251,8 @@ void Game::startGame() {
 }
 
 void Game::setupGame() {
+	cout << "Entering setup mode..." << endl;
+	cout << "You may choose from any of the following commands: '+ <piece> <square>', '- <square>', or '= <colour>'." << endl;
 	string input;
 
 	while (getline(cin, input)) {
@@ -264,6 +267,7 @@ void Game::setupGame() {
 		if (arg1 == "done") {
 			if(checkValid()) {
 				cout << "Exiting setup mode..." << endl;
+				cout << "Please start a game with the command 'game <white-player> <black-player>'." << endl;
 				return;
 
 			} else {
@@ -280,6 +284,7 @@ void Game::setupGame() {
 
 		if (arg1 == "+" && arg2.size() == 1) {
 			string arg3;
+
 			if (!getline(tokenize, arg3, ' ') || arg3.size() != 2) {
 				cout << "Improper command: no coordinates." << endl;
 				continue;
@@ -293,6 +298,7 @@ void Game::setupGame() {
 				cout << "Improper command: bad coordinate." << endl;
 				continue;
 			}
+
 			board->addTile(arg2[0], location);
 			studio->attach(obs.at(location.first + 8 * location.second + 1));
 			studio->render();
