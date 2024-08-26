@@ -27,9 +27,11 @@ public:
 	Player *&getPlayer(int playerNum);
 	void startGame();
 	void setupGame();
-	Board *&getBoard();	
-	void finish() {final = true;}
-	bool getFinish() {return final;}
+	void resetGame();
+	Board *&getBoard();
+	int gamesPlayed() { return (whiteWins + blackWins); }
+	void finish() { final = true; }
+	bool getFinish() { return final; }
 };
 
 #endif

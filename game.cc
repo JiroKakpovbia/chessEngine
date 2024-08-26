@@ -11,10 +11,8 @@ Player *&Game::getPlayer(int playerNum) {
 }
 
 Game::Game (Player *white, Player *black, Xwindow *window): whitePlayer{white}, blackPlayer{black}, board{new Board}, history{new History}, studio{new Studio{board}}, window{window} {
-	cout << "______________________________________________________________________" << endl;
-	cout << endl << "Welcome to Chess! Please enter one of the following commands:" << endl;
-	cout << "'setup' or 'game <white-player> <black-player>'." << endl;
-	cout << "______________________________________________________________________" << endl;
+	cout << "______________________________________________________________________" << endl << endl;
+	cout << "Welcome to Chess! Please wait while the board is being constructed..." << endl;
 	
 	Text *textScreen = new Text{studio};
 
@@ -26,10 +24,12 @@ Game::Game (Player *white, Player *black, Xwindow *window): whitePlayer{white}, 
 		for (int x = 0; x < 8; ++x) {
 			Graphics *tileScreen = new Graphics{x, y, studio, window};
 			obs.push_back(tileScreen);
-			//studio->attach(tileScreen);
 			tileScreen->notify();
 		}
 	}
+
+	cout << endl << "Board construction is complete! Please enter one of the following commands:" << endl;
+	cout << "'setup' or 'game <white-player> <black-player>'." << endl;
 }
 
 Game::~Game() {
@@ -62,21 +62,20 @@ void Game::startGame() {
 	Player *currPlayer;
 
 	while (!board->checkMate() && !board->staleMate()) {
-		if (board->getCurrTurn() % 2 == 0) // White's turn
-			cout << endl << "White's Turn: ";
-		else // Black's turn
-			cout << endl << "Black's Turn: ";
+		currPlayer = (board->getCurrTurn() % 2 == 0) ? whitePlayer : blackPlayer; // determines the current player's turn
+
+		if (board->inCheck(*board)) { // checks to see if the current player is in check
+			string checkedPlayer = (dynamic_cast<Human*>(currPlayer)) ? "White" : "Black";
+			cout << checkedPlayer << " is in check!" << endl;
+		}
+
+		if (currPlayer == whitePlayer) // white's turn
+			cout << "White's Turn: ";
+		else // black's turn
+			cout << "Black's Turn: ";
 
 		// determines who the current player is and reads their move
-		vector<string> input;
-		if (board->getCurrTurn() % 2 == 0) {
-			currPlayer = whitePlayer;
-			input = whitePlayer->getMove(*board);
-
-		} else {
-			currPlayer = blackPlayer;
-			input = blackPlayer->getMove(*board);
-		}
+		vector<string> input = currPlayer->getMove(*board);
 
 		if (input.size() == 0) {
 			finish();
@@ -87,7 +86,7 @@ void Game::startGame() {
 			if (input.at(0) == "resign") { // if a Player resigns, give the opposite Player the win
 				break;
 
-			} else if (input.at(0) == "undo") { // if a Player undoes their move, update the board history 
+			} else if (input.at(0) == "undo") { // if a Player undoes their move, update the board history
 				history->undo(board, studio, obs);
 				continue;
 			}
@@ -132,9 +131,8 @@ void Game::startGame() {
 			continue;
 		}
 
-		char returned;
-
 		if ((input.size() == 3) || (input.size() == 4)) {
+			char returned;
 			char promo;
 
 			if (input.size() == 3) {
@@ -159,11 +157,11 @@ void Game::startGame() {
 			history->addHistory(beg, end, returned, false);
 
 			// output the move that was made
-			string colour = ((board->getCurrTurn() % 2) == 0) ? "White" : "Black";
+			string colour = (currPlayer == whitePlayer) ? "White" : "Black";
 			string player = (dynamic_cast<Human*>(currPlayer)) ? "Human" : "Computer";
         	cout << endl << colour << " " << player << " moved [" << input.at(1) << "] to [" << input.at(2) << "]";
 
-			if ((returned == 'C') || (returned == 'c') ) {
+			if ((returned == 'C') || (returned == 'c')) {
 				cout << ", and castled";
 			}
 
@@ -205,8 +203,6 @@ void Game::startGame() {
 					studio->detach(obs.at(8 * beg.second + beg.first - 3));
 
 				} else { // long castle
-					//studio->attach(obs.at(beg.second * 8 + beg.first));
-					//studio->attach(obs.at(beg.second * 8 + beg.first - 3));
 					studio->attach(obs.at(8 * beg.second + beg.first + 2));
 					studio->attach(obs.at(8 * beg.second + beg.first + 3));
 					studio->attach(obs.at(8 * beg.second + beg.first + 4));
@@ -214,9 +210,6 @@ void Game::startGame() {
 					studio->detach(obs.at(8 * beg.second + beg.first + 2));
 					studio->detach(obs.at(8 * beg.second + beg.first + 3));
 					studio->detach(obs.at(8 * beg.second + beg.first + 4));
-
-					//studio->detach(obs.at(beg.second * 8 + beg.first));
-					//studio->detach(obs.at(beg.second * 8 + beg.first - 3));
 				}
 
 			} else { // update Tiles involved in a regular move
@@ -225,14 +218,14 @@ void Game::startGame() {
 		}
 
 		board->setCurrTurn(board->getCurrTurn() + 1);
-    	cout << "______________________________________________________________________" << endl;
+    	cout << "______________________________________________________________________" << endl << endl;
 	}
 
 	if (board->checkMate()) {
 		cout << endl << "Checkmate!" << endl << endl;	
 		window->drawString(400, 400, "Checkmate!", Xwindow::Black);
 
-		if (board->getCurrTurn()%2 == 0) {
+		if (currPlayer == whitePlayer) {
 			++blackWins;
 			cout << "Black has won!" << endl;
 			window->drawString(400, 400, "Black Wins!", Xwindow::Black);
@@ -250,7 +243,7 @@ void Game::startGame() {
 		window->drawString(70, 70, "Stalemate!", Xwindow::Black);
 
 	} else {
-		if (board->getCurrTurn()%2 == 0) {
+		if (currPlayer == whitePlayer) {
 			++blackWins;
 			cout << endl << "Black has won!" << endl;
 			window->drawString(400, 400, "Black Wins!", Xwindow::Black);
@@ -261,18 +254,20 @@ void Game::startGame() {
 			window->drawString(400, 400, "White Wins!", Xwindow::Black);
 		}
 	}
-
-
-	// cout << "Start a new game with the command 'game <white-player> <black-player>', or quit by pressing 'Ctrl-D'." << endl;
-	// cin << ""
 }
 
 void Game::setupGame() {
 	cout << "Entering setup mode..." << endl;
+	cout << "______________________________________________________________________" << endl << endl;
 	cout << "You may choose from any of the following commands: '+ <piece> <square>', '- <square>', '= <colour>', or 'clear'." << endl;
 	string input;
 
-	while (getline(cin, input)) {
+	while (true) {
+		cout << endl << "Command: ";
+		if (!getline(cin, input)) {
+			break;
+		}
+
 		stringstream tokenize(input);
 		string arg1;
 
@@ -283,8 +278,7 @@ void Game::setupGame() {
 		
 		if (arg1 == "done") {
 			if(checkValid()) {
-				cout << "Exiting setup mode..." << endl;
-				cout << "Please start a game with the command 'game <white-player> <black-player>'." << endl;
+				cout << endl << "Exiting setup mode..." << endl;
 				return;
 
 			} else {
@@ -353,9 +347,11 @@ void Game::setupGame() {
 		} else if (arg1 == "="){
 			if (arg2 == "black") {
 				board->setCurrTurn(1);
+				cout << endl << "It is now Black's turn." << endl << endl;
 
 			} else if (arg2 == "white") {
 				board->setCurrTurn(0);
+				cout << endl << "It is now White's turn." << endl << endl;
 
 			} else {
 				cout << "Improper command: no valid player given." << endl;
@@ -367,17 +363,62 @@ void Game::setupGame() {
 	}
 }
 
-// player class needs to hold a win counter
+// Resets the board for a new game
+void Game::resetGame() {
+	// reset the players
+	delete whitePlayer;
+	delete blackPlayer;
+	whitePlayer = nullptr;
+	blackPlayer = nullptr;
+
+	// reset the board
+	delete board;
+	board = new Board;
+
+	// reset the move history
+	delete history;
+	history = new History;
+
+	// reset the graphics
+	delete studio;
+	studio = new Studio{board};
+
+	// reset and redisplay the observers
+	for (auto it = obs.begin(); it != obs.end(); ++it) {
+      delete *it;
+	  *it = nullptr;
+  	}
+
+	obs.erase(obs.begin(), obs.end());
+
+	Text *textScreen = new Text{studio};
+
+	obs.push_back(textScreen);
+	studio->attach(textScreen);
+	textScreen->notify();
+
+	for (int y = 0; y < 8; ++y) {
+		for (int x = 0; x < 8; ++x) {
+			Graphics *tileScreen = new Graphics{x, y, studio, window};
+			obs.push_back(tileScreen);
+			tileScreen->notify();
+		}
+	}
+}
+
+// Player class needs to hold a win counter
 void Game::printScore() {
-	cout << endl << "Final Score:" << endl;
+	cout << endl << endl << "Final Score:" << endl;
 	cout << "White: " << whiteWins << endl;
 	cout << "Black: " << blackWins << endl;	
 }
 
+// Returns the current board
 Board *&Game::getBoard() {
 	return board;
 }
 
+// Checks if the current board setup is valid (used for setup mode)
 bool Game::checkValid() {
 	int whiteKings = 0;
 	int blackKings = 0;
