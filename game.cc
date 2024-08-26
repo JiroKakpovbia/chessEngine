@@ -163,9 +163,9 @@ void Game::startGame() {
 			string player = (dynamic_cast<Human*>(currPlayer)) ? "Human" : "Computer";
         	cout << endl << colour << " " << player << " moved [" << input.at(1) << "] to [" << input.at(2) << "]";
 
-			// if ( ) {
-			// 	cout << ", and castled";
-			// }
+			if ((returned == 'C') || (returned == 'c') ) {
+				cout << ", and castled";
+			}
 
 			if ((input.size() == 4) && ((board->getTile(end)->getSymbol() == promo))) { // output if the move was a promotion
 				cout << ", and promoted their pawn to a ";
