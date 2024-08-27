@@ -293,14 +293,17 @@ void Game::setupGame() {
 		} else if (arg1 == "clear") {
 			for (int y = 0; y < board->getBoardSize(); ++y) {
 				for (int x = 0; x < board->getBoardSize(); ++x) {
-					board->removeTile({y,x});
-					attach(obs.at(y + 8 * x + 1));
+					if ((board->getTile({y,x})->getSymbol() != '_') || (board->getTile({y,x})->getSymbol() != ' ')) {
+						board->removeTile({y,x});
+						attach(obs.at(8 * y + x + 1));
+					}
 				}
 			}
 			render();
 			for (int y = 0; y < board->getBoardSize(); ++y) {
 				for (int x = 0; x < board->getBoardSize(); ++x) {
-					detach(obs.at(y + 8 * x + 1));
+					if ((board->getTile({y,x})->getSymbol() != '_') || (board->getTile({y,x})->getSymbol() != ' '))
+						detach(obs.at(8 * y + x + 1));
 				}
 			}
 			continue;
@@ -330,9 +333,9 @@ void Game::setupGame() {
 			}
 
 			board->addTile(arg2[0], location);
-			attach(obs.at(location.first + 8 * location.second + 1));
+			attach(obs.at(8 * location.second + location.first + 1));
 			render();
-			detach(obs.at(location.first + 8 * location.second + 1));
+			detach(obs.at(8 * location.second + location.first + 1));
 
 		} else if (arg1 == "-") {
 			int x = arg2[0] - 'a';
@@ -345,9 +348,9 @@ void Game::setupGame() {
 			}
 
 			board->removeTile(location);
-			attach(obs.at(location.first + 8 * location.second + 1));
+			attach(obs.at(8 * location.second + location.first + 1));
 			render();
-			detach(obs.at(location.first + 8 * location.second + 1));
+			detach(obs.at(8 * location.second + location.first + 1));
 
 		} else if (arg1 == "="){
 			if (arg2 == "black") {
