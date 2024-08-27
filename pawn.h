@@ -9,22 +9,18 @@ class Pawn : public Tile {
     bool justMoved = false;
     bool justMoved2 = false;
     void possibleEnPassant(const pair<int, int> &posn, Board &board, vector<pair<int, int>> &possiblemoves);
-    public:
-        Pawn(char symbol) : Tile{symbol} {};
-        bool Moved() { return moved; }
-        void setJustMoved(bool torf){ 
-            justMoved = torf;
-            if(!moved && torf){
-                moved = torf;
-            }
+  public:
+    Pawn(char symbol) : Tile{symbol} {};
+    bool Moved() override { return moved; }
+    void setJustMoved(bool torf) override { 
+        justMoved = torf;
+        if(!moved && torf){
+            moved = torf;
         }
-        bool getJustMoved(){ return justMoved; }
-        void setJustMoved2(bool torf){ justMoved2 = torf; }
-        bool getJustMoved2(){ return justMoved2; }
-        vector<pair<int, int>> possibleMoves(const pair<int, int> &posn, Board &board) override;
-        vector<pair<int, int>> possibleCaptures(const pair<int, int> &posn, Board &board, const bool secondcall) override;
-        vector<pair<int, int>> possibleChecks(const pair<int, int> &posn, Board &board) override;
-
-
+    }
+    bool getJustMoved() override { return justMoved; }
+    void setJustMoved2(bool torf) override { justMoved2 = torf; }
+    bool getJustMoved2() override { return justMoved2; }
+    vector<pair<int, int>> possibleMoves(const pair<int, int> &posn, Board &board) override;
 };
 #endif
