@@ -56,7 +56,7 @@ std::vector<string> Level1::getMove(Board &board) {
     string promo;
     if (((board.getTile(fromCoords)->getSymbol() == 'P') || (board.getTile(fromCoords)->getSymbol() == 'p')) &&
     ((toCoords.second == 0) || (toCoords.second == 7))) {
-        vector<string> promoOptions{"Q", "R", "B", "N"};
+        vector<char> promoOptions = ((board.getCurrTurn() % 2) == 0) ? vector{'R', 'N', 'B', 'Q'} : vector{'r', 'n', 'b', 'q'};
         int promoChoice = rand() % 4;
         promo = promoOptions[promoChoice];
     }

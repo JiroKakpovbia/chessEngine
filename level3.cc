@@ -29,7 +29,7 @@ std::vector<string> Level3::getMove(Board &board) {
             for (int y = 0; y < board.getBoardSize(); ++y) {
                 if (board.getBoard()[x][y] == piece) { // check if the given piece is found on the board
                     fromCoords = {x, y}; // store coordinates of this piece
-                    capturesChecksAndSafeMoves = piece->possibleCaptures(fromCoords, board, true); // check all the possible captures of the piece
+                    capturesChecksAndSafeMoves = piece->possibleCaptures(fromCoords, board); // check all the possible captures of the piece
 
                     vector<pair<int, int>> checks = piece->possibleChecks(fromCoords, board);
                     capturesChecksAndSafeMoves.insert(capturesChecksAndSafeMoves.end(), checks.begin(), checks.end()); // append all the possible checks of the piece
@@ -41,7 +41,7 @@ std::vector<string> Level3::getMove(Board &board) {
         for (int x = 0; x < board.getBoardSize(); ++x) {
             for (int y = 0; y < board.getBoardSize(); ++y) {
                 if ((board.getBoard()[x][y]->getSymbol() != ' ') || (board.getBoard()[x][y]->getSymbol() != '_')) {
-                    vector<pair<int, int>> captures = board.getBoard()[x][y]->possibleCaptures({x, y}, board, true);
+                    vector<pair<int, int>> captures = board.getBoard()[x][y]->possibleCaptures({x, y}, board);
 
                     if (find(captures.begin(), captures.end(), fromCoords) != captures.end()) { // if this piece is in danger of being captured
                         moves = piece->possibleMoves(fromCoords, board);
@@ -120,7 +120,7 @@ std::vector<string> Level3::getMove(Board &board) {
     // decide if pawn promotion is available
     string promo;
     if (((board.getTile(fromCoords)->getSymbol() == 'P') || (board.getTile(fromCoords)->getSymbol() == 'p')) && ((toCoords.second == 0) || (toCoords.second == 7))) {
-        vector<string> promoOptions{"Q", "R", "B", "N"};
+        vector<char> promoOptions = ((board.getCurrTurn() % 2) == 0) ? vector{'R', 'N', 'B', 'Q'} : vector{'r', 'n', 'b', 'q'};
         int promoChoice = rand() % 4;
         promo = promoOptions[promoChoice];
     }
