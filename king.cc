@@ -1,9 +1,10 @@
 #include "king.h"
+#include <iostream>
 using namespace std;
 
 vector<pair<int, int>> King::possibleMoves(const pair<int, int> &posn, Board &board){
     // Define variables
-    vector<pair<int, int>> possiblemoves; // Define variable for possible moves
+    vector<pair<int, int>> possibleMoves; // Define variable for possible moves
     pair<int, int> posn2; // Define variable for posn2 to check moves
     Tile *piece; // Define variable to store what is at that tile
     int currTurn = board.getCurrTurn(); // Define a variable to store who's turn it is
@@ -11,8 +12,9 @@ vector<pair<int, int>> King::possibleMoves(const pair<int, int> &posn, Board &bo
     vector<pair<int, int>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}}; // Define a variable to store the directions a piece can move
 
     // Iterate through all moves the king can make
-    for(const pair<int, int> &dir : directions){
-        posn2 = posn; // Reset the position of the piece 
+    for (auto &dir : directions) {
+        posn2 = posn; // Reset the position of the piece
+
         posn2.first += dir.first; // Update the x coordinate
         posn2.second += dir.second; // Update the y coordinate
 
@@ -24,29 +26,30 @@ vector<pair<int, int>> King::possibleMoves(const pair<int, int> &posn, Board &bo
         // Simulate the move on a temporary board
         incheck = simulateMove(posn, posn2, board, piece);
 
-        if(!incheck){
+        if (!incheck){
             if(piece->getSymbol() != ' ' && piece->getSymbol() != '_'){
                 if(currTurn % 2 == 0){ // White turn
                     if(islower(piece->getSymbol())){
-                        possiblemoves.push_back(posn2);
+                        possibleMoves.push_back(posn2);
                     } 
                     continue;
                 } else { // Black turn
                     if(isupper(piece->getSymbol())){
-                        possiblemoves.push_back(posn2);
+                        possibleMoves.push_back(posn2);
                     } 
                     continue; 
                 }
             }
-            possiblemoves.push_back(posn2);
+            possibleMoves.push_back(posn2);
         }
     }
 
     // Determine if castling is possible
-    possibleCastles(posn, board, possiblemoves);
+    if (((posn == make_pair(4, 0)) && (board.getTile(posn)->getSymbol() == 'K')) || ((posn == make_pair(4, 7)) && (board.getTile(posn)->getSymbol() == 'k')))
+        possibleCastles(posn, board, possibleMoves);
 
     // Return the possiblemoves
-    return possiblemoves;
+    return possibleMoves;
 }
 
 vector<pair<int, int>> King::possibleChecks(const pair<int, int> &posn, Board &board){
@@ -56,7 +59,7 @@ vector<pair<int, int>> King::possibleChecks(const pair<int, int> &posn, Board &b
 
 void King::possibleCastles(const pair<int, int> &posn, Board &board, vector<pair<int, int>> &possiblemoves){
     // Ensure the king has not moved
-    if(moved || !((posn.second == 0 || posn.second == 7)) || !(posn.first == 4)) { return; }
+    if (getMoved() || !((posn.second == 0 || posn.second == 7)) || !(posn.first == 4)) { return; }
 
     // Define variables
     pair<int, int> posn2; // Define variable for posn2 to check moves
@@ -70,7 +73,7 @@ void King::possibleCastles(const pair<int, int> &posn, Board &board, vector<pair
         // Ensure that our rook is to the right of the king
         piece = board.getTile({posn.first + 3, posn.second});
         if((currTurn % 2 == 0 && piece->getSymbol() == 'R') || (currTurn % 2 == 1 && piece->getSymbol() == 'r')){ // Determine the turn
-            if(!piece->Moved()){
+            if(!piece->getMoved()){
                 // Ensure that there are no pieces between the king and the rook
                 piece = board.getTile({posn.first + 1, posn.second});
                 if(piece->getSymbol() == ' ' || piece->getSymbol() == '_'){
@@ -105,7 +108,7 @@ void King::possibleCastles(const pair<int, int> &posn, Board &board, vector<pair
         // Ensure that our rook is to the right of the king
         piece = board.getTile({posn.first - 4, posn.second});
         if((currTurn % 2 == 0 && piece->getSymbol() == 'R') || (currTurn % 2 == 1 && piece->getSymbol() == 'r')){ // Determine the turn
-            if(!piece->Moved()){
+            if(!piece->getMoved()){
                 // Ensure that there are no pieces between the king and the rook
                 piece = board.getTile({posn.first - 1, posn.second});
                 if(piece->getSymbol() == ' ' || piece->getSymbol() == '_'){

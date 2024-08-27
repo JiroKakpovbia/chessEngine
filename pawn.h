@@ -5,17 +5,15 @@
 using namespace std;
 
 class Pawn : public Tile {
-    bool moved = false;
     bool justMoved = false;
     bool justMoved2 = false;
     void possibleEnPassant(const pair<int, int> &posn, Board &board, vector<pair<int, int>> &possiblemoves);
   public:
     Pawn(char symbol) : Tile{symbol} {};
-    bool Moved() override { return moved; }
     void setJustMoved(bool torf) override { 
         justMoved = torf;
-        if(!moved && torf){
-            moved = torf;
+        if(!getMoved() && torf){
+            setMoved(torf);
         }
     }
     bool getJustMoved() override { return justMoved; }

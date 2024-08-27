@@ -5,15 +5,13 @@
 using namespace std;
 
 class Rook : public Tile {
-    bool moved = false;
     bool justMoved = false;
   public:
     Rook(char symbol) : Tile{symbol} {};
-    bool Moved() override { return moved; }
     void setJustMoved(bool torf) override { 
         justMoved = torf;
-        if(!moved && torf){
-            moved = torf;
+        if(!getMoved() && torf){
+            setMoved(torf);
         }
     }
     vector<pair<int, int>> possibleMoves(const pair<int, int> &posn, Board &board) override;

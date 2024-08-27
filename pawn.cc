@@ -3,7 +3,7 @@ using namespace std;
 
 vector<pair<int, int>> Pawn::possibleMoves(const pair<int, int> &posn, Board &board){
     // Define variables
-    vector<pair<int, int>> possiblemoves; // Define variable for possible moves
+    vector<pair<int, int>> possibleMoves; // Define variable for possible moves
     pair<int, int> posn2; // Define variable for posn2 to check moves
     Tile *piece; // Define variable to store what is at that tile
     int currTurn = board.getCurrTurn(); // Define a variable to store who's turn it is
@@ -18,10 +18,10 @@ vector<pair<int, int>> Pawn::possibleMoves(const pair<int, int> &posn, Board &bo
     }
 
     // Iterate through all moves the pawn can make
-    for(const pair<int, int> &dir : directions){
+    for (auto &dir : directions){
         posn2 = posn; // Reset the position of the piece 
 
-        if (moved && (dir.second == 2 || dir.second == -2)) continue; // If the pawn has moved, do not check the double forward case
+        if (getMoved() && (dir.second == 2 || dir.second == -2)) continue; // If the pawn has moved, do not check the double forward case
 
         posn2.first += dir.first; // Update the x coordinate
         posn2.second += dir.second; // Update the y coordinate
@@ -39,25 +39,25 @@ vector<pair<int, int>> Pawn::possibleMoves(const pair<int, int> &posn, Board &bo
                 if(piece->getSymbol() != ' ' && piece->getSymbol() != '_'){
                     if(currTurn % 2 == 0){ // White turn
                         if(islower(piece->getSymbol())){
-                            possiblemoves.push_back(posn2);
+                            possibleMoves.push_back(posn2);
                         } continue;
                     } else { // Black turn
                         if(isupper(piece->getSymbol())){
-                        possiblemoves.push_back(posn2);
+                        possibleMoves.push_back(posn2);
                         } continue; 
                     }
                 }
             } else if(piece->getSymbol() == ' ' || piece->getSymbol() == '_'){ // Possible forward moves
-                possiblemoves.push_back(posn2);
+                possibleMoves.push_back(posn2);
             } continue;
         }
     }
 
     // Check if an En Passant is available
-    possibleEnPassant(posn, board, possiblemoves);
+    possibleEnPassant(posn, board, possibleMoves);
 
     // Return the possibleMoves
-    return possiblemoves;
+    return possibleMoves;
 }
 
 void Pawn::possibleEnPassant(const pair<int, int> &posn, Board &board, vector<pair<int, int>> &possiblemoves){

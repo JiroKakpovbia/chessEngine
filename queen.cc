@@ -1,4 +1,5 @@
 #include "queen.h"
+#include <iostream>
 using namespace std;
 
 vector<pair<int, int>> Queen::possibleMoves(const pair<int, int> &posn, Board &board){
@@ -11,7 +12,7 @@ vector<pair<int, int>> Queen::possibleMoves(const pair<int, int> &posn, Board &b
     vector<pair<int, int>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}}; // Define a variable to store the directions a piece can move
 
     // Iterate through all moves the queen can make
-    for(const pair<int, int> &dir : directions){
+    for (auto &dir : directions){
         posn2 = posn; // Reset the position of the piece 
 
         while(true){

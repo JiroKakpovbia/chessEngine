@@ -1,6 +1,7 @@
 #include "tile.h"
 #include <utility>
 #include <locale>
+#include <iostream>
 using namespace std;
 
 vector<pair<int, int>> Tile::possibleCaptures(const pair<int, int> &posn, Board &board) {
@@ -28,7 +29,7 @@ vector<pair<int, int>> Tile::possibleChecks(const pair<int, int> &posn, Board &b
     char opponentKing = (currTurn % 2 == 0) ? 'k' : 'K'; // Define variable for the opponent King
 
     // Iterate through possibleMoves one by one
-    for (const pair<int, int> &move: possiblemoves){
+    for (auto &move: possiblemoves){
         Board tempboard = board;
 
         // Simulate the move
@@ -41,6 +42,7 @@ vector<pair<int, int>> Tile::possibleChecks(const pair<int, int> &posn, Board &b
         possiblecaptures = possibleCaptures(move, tempboard);
         for(const pair<int, int> &capture : possiblecaptures){
             piece = tempboard.getTile(capture);
+            
             if(piece->getSymbol() == opponentKing){
                 possibleChecks.push_back(move);
                 break; // Can not check multiple times in the same position
@@ -56,6 +58,7 @@ bool Tile::simulateMove(const pair<int, int> &posn1, const pair<int, int> &posn2
     Board tempboard = board; // create temporary board as to not modify the original
     
     // execute the move on the temporary board
+    cout << "Simulating a move from [" << posn1.first + 1 << ", " << posn1.second + 1 << "] to [" << posn2.first + 1 << ", " << posn2.second + 1 << "]" << endl;
     tempboard.removeTile(posn2);
     piece = board.getTile(posn1);
     tempboard.addTile(piece->getSymbol(), posn2);

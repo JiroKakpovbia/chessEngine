@@ -11,7 +11,7 @@ vector<pair<int, int>> Rook::possibleMoves(const pair<int, int> &posn, Board &bo
     vector<pair<int, int>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}; // Define a variable to store the directions a piece can move
 
     // Iterate through all moves the rook can make
-    for(const pair<int, int> &dir : directions){
+    for (auto &dir : directions){
         posn2 = posn; // Reset the position of the piece 
 
         while(true){

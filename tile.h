@@ -8,12 +8,14 @@ class Board;
 
 class Tile {
     char symbol;
+    bool moved = false;
   public:
     Tile(char sym) : symbol{sym} {}
     virtual ~Tile() {}
     char getSymbol() const { return symbol; }
-    void setSymbol(char sym) { symbol = sym;}
-    virtual bool Moved() { return false; }
+    void setSymbol(char sym) { symbol = sym; }
+    virtual bool getMoved() { return moved; }
+    virtual void setMoved(bool torf) { moved = torf; }
     virtual bool getJustMoved() { return false; }
     virtual void setJustMoved(bool torf) {}
     virtual bool getJustMoved2() { return false; }

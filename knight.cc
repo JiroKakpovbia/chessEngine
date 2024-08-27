@@ -11,7 +11,7 @@ vector<pair<int, int>> Knight::possibleMoves(const pair<int, int> &posn, Board &
     vector<pair<int, int>> directions = {{1, 2}, {1, -2}, {-1, 2}, {-1, -2}, {2, 1}, {2, -1}, {-2, 1}, {-2, -1}}; // Define a variable to store the directions a piece can move
 
     // Iterate through all moves the knight can make
-    for(const pair<int, int> &dir : directions){
+    for (auto &dir : directions){
         posn2 = posn; // Reset the position of the piece 
 
         posn2.first += dir.first; // Update the x coordinate
