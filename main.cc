@@ -16,14 +16,17 @@ int main() {
     Game game = Game{nullptr, nullptr, window};
 
     while (true) {
+        bool setup = false;
         while (true) {
             cout << "Command: ";
 
             string input;
             getline(cin, input);
 
+            cout << endl;
 
-	        cout << "______________________________________________________________________" << endl << endl;
+            // if (setup)
+	        //     cout << "______________________________________________________________________" << endl << endl;
 
             if (input == "setup") {
                 if (game.gamesPlayed() > 0) {
@@ -39,6 +42,8 @@ int main() {
                     delete window;
                     return 0;
                 }
+
+                setup = true;
 
             } else {
                 stringstream tokenize(input);
@@ -65,7 +70,7 @@ int main() {
                     continue;
                 }
 
-                if (game.gamesPlayed() > 0) {
+                if ((game.gamesPlayed() > 0) && (!setup)) {
                     game.resetGame();
                 }
 
@@ -97,7 +102,7 @@ int main() {
                     continue;
                 }
 
-                cout << "____________________________________________________________________" << endl << endl;
+                cout << endl << "____________________________________________________________________" << endl << endl;
                 game.startGame();
 
                 if (game.getFinish()) {
@@ -105,7 +110,7 @@ int main() {
                     return 0;
 
                 } else {
-                    cout << endl << "Start a new game with the command 'game <white-player> <black-player>', or quit by pressing 'Ctrl-D'." << endl;
+                    cout << endl << "Start a new game with the command 'game <white-player> <black-player>' or 'setup', or quit by pressing 'Ctrl-D'." << endl;
                     break;
                 }
             }
