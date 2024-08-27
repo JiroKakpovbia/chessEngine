@@ -244,15 +244,19 @@ void Game::startGame() {
 	} else {
 		if (currPlayer == whitePlayer) {
 			++blackWins;
-			cout << endl << "Black has won!" << endl;
+			cout << endl << endl << "White has resigned." << endl << endl;
+			cout << "Black has won!" << endl;
 			window->drawString(400, 400, "Black Wins!", Xwindow::Black);
 
 		} else {
 			++whiteWins;
-			cout << endl << "White has won!" << endl;
+			cout << endl << endl << "Black has resigned." << endl << endl;
+			cout << "White has won!" << endl;
 			window->drawString(400, 400, "White Wins!", Xwindow::Black);
 		}
 	}
+
+	cout << "______________________________________________________________________" << endl << endl;
 }
 
 void Game::setupGame() {
@@ -264,8 +268,10 @@ void Game::setupGame() {
 	while (true) {
 		cout << "Command: ";
 		if (!getline(cin, input)) {
+			cout << endl;
 			break;
 		}
+		cout << endl;
 
 		stringstream tokenize(input);
 		string arg1;
@@ -346,11 +352,11 @@ void Game::setupGame() {
 		} else if (arg1 == "="){
 			if (arg2 == "black") {
 				board->setCurrTurn(1);
-				cout << endl << "It is now Black's turn." << endl << endl;
+				cout << endl << "It is now Black's turn." << endl;
 
 			} else if (arg2 == "white") {
 				board->setCurrTurn(0);
-				cout << endl << "It is now White's turn." << endl << endl;
+				cout << endl << "It is now White's turn." << endl;
 
 			} else {
 				cout << "Improper command: no valid player given." << endl << endl;
