@@ -63,14 +63,14 @@ void Game::startGame() {
 	while (!board->checkMate() && !board->staleMate()) {
 		currPlayer = (board->getCurrTurn() % 2 == 0) ? whitePlayer : blackPlayer; // determines the current player's turn
 
-		if (board->inCheck(*board)) { // checks to see if the current player is in check
-			string checkedPlayer = (dynamic_cast<Human*>(currPlayer)) ? "White" : "Black";
+		if (board->inCheck(*board) > 0) { // checks to see if the current player is in check
+			string checkedPlayer = (currPlayer == whitePlayer) ? "White" : "Black";
 			cout << checkedPlayer << " is in check!" << endl;
 		}
 
-		if (currPlayer == whitePlayer) // white's turn
+		if (currPlayer == whitePlayer) // White's turn
 			cout << "White's Turn: ";
-		else // black's turn
+		else // Black's turn
 			cout << "Black's Turn: ";
 
 		// determines who the current player is and reads their move
@@ -103,7 +103,7 @@ void Game::startGame() {
 		}
 	
 		if (input.at(1).size() != 2) {
-			cout << "Improper command: bad starting coordinate." << endl;
+			cout << "Improper command: bad starting coordinate." << endl << endl;
 			continue;
 		}
 
@@ -112,12 +112,12 @@ void Game::startGame() {
 		pair<int, int> beg = make_pair(x1, y1);
 		
 		if (x1 < 0 || x1 > 7 || y1 < 0 || y1 > 7) { // improper coord
-			cout << "Improper command: bad starting coordinate." << endl;
+			cout << "Improper command: bad starting coordinate." << endl << endl;
 			continue;
 		}
 
 		if(input.at(2).size() != 2) {
-			cout << "Improper command: bad ending coordinate." << endl;
+			cout << "Improper command: bad ending coordinate." << endl << endl;
 			continue;
 		}
 		
@@ -126,7 +126,7 @@ void Game::startGame() {
 		pair<int, int> end = make_pair(x2, y2);
 		
 		if (x2 < 0 || x2 > 7 || y2 < 0 || y2 > 7) { // improper coord
-			cout << "Improper command: bad ending coordinate." << endl;
+			cout << "Improper command: bad ending coordinate." << endl << endl;
 			continue;
 		}
 
@@ -144,11 +144,11 @@ void Game::startGame() {
 
 			// checking invalid inputs
 			if (returned == 'X') { // character represents a failed move
-				cout << "Improper command: move must be legal." << endl;
+				cout << "Improper command: move must be legal." << endl << endl;
 				continue;
 
 			} else if (returned == 'P') { // character represents a failed pawn promotion
-				cout << "Improper command: valid pawn promotion must be made." << endl;
+				cout << "Improper command: valid pawn promotion must be made." << endl << endl;
 				continue;
 			}
 			
@@ -158,7 +158,7 @@ void Game::startGame() {
 			// output the move that was made
 			string colour = (currPlayer == whitePlayer) ? "White" : "Black";
 			string player = (dynamic_cast<Human*>(currPlayer)) ? "Human" : "Computer";
-        	cout << endl << colour << " " << player << " moved [" << input.at(1) << "] to [" << input.at(2) << "]";
+        	cout << endl << endl << colour << " " << player << " moved [" << input.at(1) << "] to [" << input.at(2) << "]";
 
 			if ((returned == 'C') || (returned == 'c')) {
 				cout << ", and castled";
@@ -221,7 +221,7 @@ void Game::startGame() {
 	}
 
 	if (board->checkMate()) {
-		cout << endl << "Checkmate!" << endl << endl;	
+		cout << "Checkmate!" << endl << endl;	
 		window->drawString(400, 400, "Checkmate!", Xwindow::Black);
 
 		if (currPlayer == whitePlayer) {
@@ -237,7 +237,7 @@ void Game::startGame() {
 	} else if (board->staleMate()) {
 		whiteWins += 0.5;
 		blackWins += 0.5;
-		cout << endl << "Stalemate!" << endl << endl;
+		cout << "Stalemate!" << endl << endl;
 		cout << "It's a tie!" << endl;
 		window->drawString(70, 70, "Stalemate!", Xwindow::Black);
 
@@ -262,7 +262,7 @@ void Game::setupGame() {
 	string input;
 
 	while (true) {
-		cout << endl << "Command: ";
+		cout << "Command: ";
 		if (!getline(cin, input)) {
 			break;
 		}
@@ -271,13 +271,13 @@ void Game::setupGame() {
 		string arg1;
 
 		if (!getline(tokenize, arg1, ' ')) {
-			cout << "Improper command: no input given." << endl;
+			cout << "Improper command: no input given." << endl << endl;
 			continue;		
 		}
 		
 		if (arg1 == "done") {
 			if(checkValid()) {
-				cout << endl << "Exiting setup mode..." << endl;
+				cout << endl << "Exiting setup mode..." << endl << endl;
 				return;
 
 			} else {
@@ -302,7 +302,7 @@ void Game::setupGame() {
 
 		string arg2;
 		if (!getline(tokenize, arg2, ' ')) {
-			cout << "Improper command: no second argument." << endl;
+			cout << "Improper command: no second argument." << endl << endl;
 			continue;
 		}
 
@@ -310,7 +310,7 @@ void Game::setupGame() {
 			string arg3;
 
 			if (!getline(tokenize, arg3, ' ') || arg3.size() != 2) {
-				cout << "Improper command: no coordinates." << endl;
+				cout << "Improper command: no coordinates." << endl << endl;
 				continue;
 			}
 
@@ -319,7 +319,7 @@ void Game::setupGame() {
 			pair<int, int> location = make_pair(x, y);
 
 			if (x < 0 || x > 7 || y < 0 || y > 7) {
-				cout << "Improper command: bad coordinate." << endl;
+				cout << "Improper command: bad coordinate." << endl << endl;
 				continue;
 			}
 
@@ -334,7 +334,7 @@ void Game::setupGame() {
 			pair<int, int> location = make_pair(x, y);
 
 			if (x < 0 || x > 7 || y < 0 || y > 7) {
-				cout << "Improper command: bad coordinate." << endl;
+				cout << "Improper command: bad coordinate." << endl << endl;
 				continue;
 			}
 
@@ -353,12 +353,15 @@ void Game::setupGame() {
 				cout << endl << "It is now White's turn." << endl << endl;
 
 			} else {
-				cout << "Improper command: no valid player given." << endl;
+				cout << "Improper command: no valid player given." << endl << endl;
 				continue;
 			}
 		} else {
-			cout << "Improper command: Invalid beginning command or format." << endl;
+			cout << "Improper command: Invalid beginning command or format." << endl << endl;
+			continue;
 		}
+
+		cout << "______________________________________________________________________" << endl << endl;
 	}
 }
 
@@ -380,8 +383,9 @@ void Game::resetGame() {
 
 	// reset and redisplay the observers
 	for (auto it = obs.begin(); it != obs.end(); ++it) {
-      delete *it;
-	  *it = nullptr;
+		detach(*it);
+    	delete *it;
+		*it = nullptr;
   	}
 
 	obs.erase(obs.begin(), obs.end());
@@ -403,7 +407,7 @@ void Game::resetGame() {
 
 // Player class needs to hold a win counter
 void Game::printScore() {
-	cout << endl << endl << "Final Score:" << endl;
+	cout << endl << "Final Score:" << endl;
 	cout << "White: " << whiteWins << endl;
 	cout << "Black: " << blackWins << endl;	
 }

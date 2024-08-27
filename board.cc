@@ -280,7 +280,7 @@ char Board::makeMove(pair<int, int> from, pair<int, int> to, char promoSymbol) {
     }
        
     // checks if promotion is happening, and if it is invalid
-    if (((to.second == 0) || (to.second == 7)) && ((initialTile == 'P') || (initialTile == 'p'))) {
+    if (((to.second == 0) && (initialTile == 'p')) || ((to.second == 7) && (initialTile == 'P'))) {
         if (find(validPromos.begin(), validPromos.end(), promoSymbol) != validPromos.end()) {
             promo = true;
             
@@ -382,8 +382,9 @@ char Board::makeMove(pair<int, int> from, pair<int, int> to, char promoSymbol) {
     return indicator;
 }
 
-// Returns true if the Player whose turn it is is in check
-bool Board::inCheck(Board temp) {
+// Returns the number of pieces that put the current Player in check
+int Board::inCheck(Board temp) {
+    int numOfChecks = 0;
     char king = ((currTurn % 2) == 1) ? 'k' : 'K'; // change the king depending on the current Player's turn
     vector<char> pieces = ((currTurn % 2) == 1) ? vector{'r', 'n', 'b', 'q', 'p'} : vector{'R', 'N', 'B', 'Q', 'P'}; // change the pieces depending on the current Player's turn
 
@@ -396,13 +397,13 @@ bool Board::inCheck(Board temp) {
                     temp.addTile(piece, {x, y});
 
                     // the possible captures that each Piece would make in the same position as the King
-                    vector<pair<int, int>> captures = temp.getTile({x, y})->possibleCaptures({x, y}, temp, true);
+                    vector<pair<int, int>> captures = temp.getTile({x, y})->possibleCaptures({x, y}, temp);
 
                     // check if any of those possible captures by a Piece would result in capturing another one of that same Piece
                     for (auto& capture : captures) {
                         piece = (currTurn % 2 == 1) ? toupper(piece) : tolower(piece);
                         if (temp.theBoard->at(capture.first).at(capture.second)->getSymbol() == piece) {
-                            return true; // if so, the King is in check by the subsequent Piece
+                            ++numOfChecks; // if so, the King is in check by the subsequent Piece
                         }
                     }
                 }
@@ -411,18 +412,18 @@ bool Board::inCheck(Board temp) {
         }
     }
     // there are no possible moves that would put the King in check
-    return false;
+    return numOfChecks;
 }
 
 // Returns true if the Player moving on turn "turn" is in checkmate
 bool Board::checkMate() {
-    if (inCheck(*this) && staleMate())
+    if ((inCheck(*this) > 0) && staleMate())
         return true;
 
     return false;
 }
 
-// Returns true if the Player moving on turn "turn" cannot make any moves
+// Returns true if the current Player cannot make any moves
 bool Board::staleMate() {
     int numOfMoves = 0;
 

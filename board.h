@@ -32,7 +32,7 @@ class Board {
     void addTile(char symbol, pair<int, int> tileCoords);
     void removeTile(pair<int, int> tileCoords);
     char makeMove(pair<int, int> from, pair<int, int> to, char promoSymbol = 'x');
-    bool inCheck(Board temp);
+    int inCheck(Board temp);
     bool checkMate();
     bool staleMate();
 };
