@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+chess
+
+# Testing Files
+*.in
