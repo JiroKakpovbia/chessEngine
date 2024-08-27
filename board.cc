@@ -5,6 +5,7 @@
 #include <locale>
 #include "board.h"
 #include "tile.h"
+#include "blank.h"
 #include "pawn.h"
 #include "rook.h"
 #include "knight.h"
@@ -228,7 +229,7 @@ void Board::addTile(char symbol, pair<int, int> tileCoords) {
         }
     }
     else if ((symbol == '_') || (symbol  == ' ')) { // check if we want to add an empty Tile
-        theBoard->at(tileCoords.first).at(tileCoords.second) = new Tile(symbol);
+        theBoard->at(tileCoords.first).at(tileCoords.second) = new Blank(symbol);
     }
 }
 
@@ -262,7 +263,7 @@ char Board::makeMove(pair<int, int> from, pair<int, int> to, char promoSymbol) {
     
     // set all tiles to not moved
     for (unsigned x = 0; x < activePieces.size(); ++x) {
-        if ((activePieces[x]->getSymbol() != ' ') || (activePieces[x]->getSymbol() != '_')) {
+        if (dynamic_cast<Blank *>(activePieces[x]) == nullptr) {
             activePieces[x]->setJustMoved(false);
         }
     }

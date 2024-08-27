@@ -21,9 +21,9 @@ class Pawn : public Tile {
         bool getJustMoved(){ return justMoved; }
         void setJustMoved2(bool torf){ justMoved2 = torf; }
         bool getJustMoved2(){ return justMoved2; }
-        vector<pair<int, int>> possibleMoves(const pair<int, int> &posn, Board &board);
-        vector<pair<int, int>> possibleCaptures(const pair<int, int> &posn, Board &board, const bool secondcall);
-        vector<pair<int, int>> possibleChecks(const pair<int, int> &posn, Board &board);
+        vector<pair<int, int>> possibleMoves(const pair<int, int> &posn, Board &board) override;
+        vector<pair<int, int>> possibleCaptures(const pair<int, int> &posn, Board &board, const bool secondcall) override;
+        vector<pair<int, int>> possibleChecks(const pair<int, int> &posn, Board &board) override;
 
 
 };

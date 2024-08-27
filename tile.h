@@ -22,35 +22,26 @@ class Tile {
 
     void setSymbol(char sym) { symbol = sym;}
 
-    virtual bool Moved(){
-      return true;
+    virtual bool Moved() {
+      return false;
     }
 
-    virtual bool getJustMoved(){ return false; }
+    virtual bool getJustMoved() { return false; }
 
-    virtual void setJustMoved( bool torf ){}
+    virtual void setJustMoved(bool torf){}
 
     virtual bool getJustMoved2() { return false; }
 
-    virtual void setJustMoved2( bool torf ){}
+    virtual void setJustMoved2(bool torf){}
 
     // Finds all possible moves for that the player can make
-    virtual vector<pair<int, int>> possibleMoves(const pair<int, int> &posn, Board &board){
-      vector<pair<int, int>> vec;
-      return vec;
-    }
+    virtual vector<pair<int, int>> possibleMoves(const pair<int, int> &posn, Board &board) = 0;
 
     // Finds all possible captures that the player can make
-    virtual vector<pair<int, int>> possibleCaptures(const pair<int, int> &posn, Board &board, const bool secondcall){
-      vector<pair<int, int>> vec;
-      return vec;
-    }
+    virtual vector<pair<int, int>> possibleCaptures(const pair<int, int> &posn, Board &board, const bool secondcall) = 0;
 
     // Finds all possible checks that the player can make
-    virtual vector<pair<int, int>> possibleChecks(const pair<int, int> &posn, Board &board){
-      vector<pair<int, int>> vec;
-      return vec;
-    }
+    virtual vector<pair<int, int>> possibleChecks(const pair<int, int> &posn, Board &board) = 0;
 
     bool simulateMove(const pair<int, int> &posn1, const pair<int, int> &posn2, Board &board, Tile* piece){
       Board tempboard = board;
@@ -63,4 +54,3 @@ class Tile {
 };
 
 #endif
-

@@ -3,7 +3,7 @@
 #include <locale>
 using namespace std;
 
-vector<pair<int, int>> Rook::possibleMoves(const pair<int, int> &posn, Board &board){
+vector<pair<int, int>> Rook::possibleMoves(const pair<int, int> &posn, Board &board) {
     // Define variables
     vector<pair<int, int>> possibleMoves; // Define variable for possible moves
     pair<int, int> posn2; // Define variable for posn2 to check moves
