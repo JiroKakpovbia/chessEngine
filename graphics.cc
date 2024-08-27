@@ -1,8 +1,8 @@
 #include "graphics.h"
 #include <sstream>
 
-Graphics::Graphics(int x, int y, Studio* studio, Xwindow* window)
-    : x{x}, y{y}, studio{studio}, window{window} {}
+Graphics::Graphics(int x, int y, Game* game, Xwindow* window)
+    : x{x}, y{y}, game{game}, window{window} {}
 
 void Graphics::notify() {
     if (!displayed) {
@@ -25,7 +25,7 @@ void Graphics::displayLabels() {
 }
 
 void Graphics::displayTile() {
-    auto board = studio->board()->getBoard();
+    auto board = game->getBoard()->getBoard();
     char piece = board[x][y]->getSymbol();
 
     // draw the empty Tiles

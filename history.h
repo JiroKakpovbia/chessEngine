@@ -2,20 +2,19 @@
 #define HISTORY_H_
 #include <utility>
 #include <string>
-#include "board.h"
 #include <vector>
 #include <stack>
-#include "tile.h"
-#include "studio.h"
-#include "observer.h"
+#include "board.h"
+#include "game.h"
+using namespace std;
 
 class History {
-	std::stack<std::pair<std::pair<int, int>, std::pair<int, int>>> moveHistory;
-	std::stack<char> tileHistory;
-	std::stack<bool> promoHistory;
+	stack<pair<pair<int, int>, pair<int, int>>> moveHistory;
+	stack<char> tileHistory;
+	stack<bool> promoHistory;
 	public:
-	void addHistory(std::pair<int, int> beg, std::pair<int, int> end, char taken, bool promo);
-	void undo(Board *board, Studio *studio, std::vector<Observer *> obs);
+	void addHistory(pair<int, int> beg, pair<int, int> end, char taken, bool promo);
+	void undo(Board *board, Game *game, vector<Observer *> obs);
 };
 
 #endif

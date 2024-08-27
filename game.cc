@@ -10,19 +10,19 @@ Player *&Game::getPlayer(int playerNum) {
 	return blackPlayer;
 }
 
-Game::Game (Player *white, Player *black, Xwindow *window): whitePlayer{white}, blackPlayer{black}, board{new Board}, history{new History}, studio{new Studio{board}}, window{window} {
+Game::Game (Player *white, Player *black, Xwindow *window): whitePlayer{white}, blackPlayer{black}, board{new Board}, window{window} { //history{new History}, window{window} {
 	cout << "______________________________________________________________________" << endl << endl;
 	cout << "Welcome to Chess! Please wait while the board is being constructed..." << endl;
 	
-	Text *textScreen = new Text{studio};
+	Text *textScreen = new Text{this};
 
 	obs.push_back(textScreen);
-	studio->attach(textScreen);
+	attach(textScreen);
 	textScreen->notify();
 
 	for (int y = 0; y < 8; ++y) {
 		for (int x = 0; x < 8; ++x) {
-			Graphics *tileScreen = new Graphics{x, y, studio, window};
+			Graphics *tileScreen = new Graphics{x, y, this, window};
 			obs.push_back(tileScreen);
 			tileScreen->notify();
 		}
@@ -34,10 +34,9 @@ Game::Game (Player *white, Player *black, Xwindow *window): whitePlayer{white}, 
 
 Game::~Game() {
 	delete board;
-	delete history;
+	//delete history;
 	delete whitePlayer;
 	delete blackPlayer;
-	delete studio;
 
 	for (auto it = obs.begin(); it != obs.end(); ++it) {
       delete *it;
@@ -49,11 +48,11 @@ Game::~Game() {
 }
 
 void Game::simplePrint(pair<int, int> beg, pair<int, int> end) {
-	studio->attach(obs.at(8 * beg.second + beg.first + 1));
-	studio->attach(obs.at(8 * end.second + end.first + 1));
-	studio->render();
-	studio->detach(obs.at(8 * beg.second + beg.first + 1));
-	studio->detach(obs.at(8 * end.second + end.first + 1));
+	attach(obs.at(8 * beg.second + beg.first + 1));
+	attach(obs.at(8 * end.second + end.first + 1));
+	render();
+	detach(obs.at(8 * beg.second + beg.first + 1));
+	detach(obs.at(8 * end.second + end.first + 1));
 }
 
 void Game::startGame() {
@@ -87,7 +86,7 @@ void Game::startGame() {
 				break;
 
 			} else if (input.at(0) == "undo") { // if a Player undoes their move, update the board history
-				history->undo(board, studio, obs);
+				//history->undo(board, this, obs);
 				continue;
 			}
 		}
@@ -154,7 +153,7 @@ void Game::startGame() {
 			}
 			
 			// add the valid move to the move history
-			history->addHistory(beg, end, returned, false);
+			//history->addHistory(beg, end, returned, false);
 
 			// output the move that was made
 			string colour = (currPlayer == whitePlayer) ? "White" : "Black";
@@ -186,30 +185,30 @@ void Game::startGame() {
 
 			// updating the necessary Tiles on the board
 			if (returned == 'e' || returned == 'E') { // update Tiles involved in en passant
-				studio->attach(obs.at(8 * beg.second + beg.first));
-				studio->attach(obs.at(8 * beg.second + beg.first + 2));
+				attach(obs.at(8 * beg.second + beg.first));
+				attach(obs.at(8 * beg.second + beg.first + 2));
 				simplePrint(beg, end);
-				studio->detach(obs.at(8 * beg.second + beg.first));
-				studio->detach(obs.at(8 * beg.second + beg.first + 2));
+				detach(obs.at(8 * beg.second + beg.first));
+				detach(obs.at(8 * beg.second + beg.first + 2));
 
 			} else if (returned == 'c' || returned == 'C') { // update Tiles involved in castling
 				if (beg.first > end.first) { // short castle
-					studio->attach(obs.at(8 * beg.second + beg.first));
-					studio->attach(obs.at(8 * beg.second + beg.first - 1));
-					studio->attach(obs.at(8 * beg.second + beg.first - 3));
+					attach(obs.at(8 * beg.second + beg.first));
+					attach(obs.at(8 * beg.second + beg.first - 1));
+					attach(obs.at(8 * beg.second + beg.first - 3));
 					simplePrint(beg, end);
-					studio->detach(obs.at(8 * beg.second + beg.first));
-					studio->detach(obs.at(8 * beg.second + beg.first - 1));
-					studio->detach(obs.at(8 * beg.second + beg.first - 3));
+					detach(obs.at(8 * beg.second + beg.first));
+					detach(obs.at(8 * beg.second + beg.first - 1));
+					detach(obs.at(8 * beg.second + beg.first - 3));
 
 				} else { // long castle
-					studio->attach(obs.at(8 * beg.second + beg.first + 2));
-					studio->attach(obs.at(8 * beg.second + beg.first + 3));
-					studio->attach(obs.at(8 * beg.second + beg.first + 4));
+					attach(obs.at(8 * beg.second + beg.first + 2));
+					attach(obs.at(8 * beg.second + beg.first + 3));
+					attach(obs.at(8 * beg.second + beg.first + 4));
 					simplePrint(beg, end);
-					studio->detach(obs.at(8 * beg.second + beg.first + 2));
-					studio->detach(obs.at(8 * beg.second + beg.first + 3));
-					studio->detach(obs.at(8 * beg.second + beg.first + 4));
+					detach(obs.at(8 * beg.second + beg.first + 2));
+					detach(obs.at(8 * beg.second + beg.first + 3));
+					detach(obs.at(8 * beg.second + beg.first + 4));
 				}
 
 			} else { // update Tiles involved in a regular move
@@ -289,13 +288,13 @@ void Game::setupGame() {
 			for (int y = 0; y < board->getBoardSize(); ++y) {
 				for (int x = 0; x < board->getBoardSize(); ++x) {
 					board->removeTile({y,x});
-					studio->attach(obs.at(y + 8 * x + 1));
+					attach(obs.at(y + 8 * x + 1));
 				}
 			}
-			studio->render();
+			render();
 			for (int y = 0; y < board->getBoardSize(); ++y) {
 				for (int x = 0; x < board->getBoardSize(); ++x) {
-					studio->detach(obs.at(y + 8 * x + 1));
+					detach(obs.at(y + 8 * x + 1));
 				}
 			}
 			continue;
@@ -325,9 +324,9 @@ void Game::setupGame() {
 			}
 
 			board->addTile(arg2[0], location);
-			studio->attach(obs.at(location.first + 8 * location.second + 1));
-			studio->render();
-			studio->detach(obs.at(location.first + 8 * location.second + 1));
+			attach(obs.at(location.first + 8 * location.second + 1));
+			render();
+			detach(obs.at(location.first + 8 * location.second + 1));
 
 		} else if (arg1 == "-") {
 			int x = arg2[0] - 'a';
@@ -340,9 +339,9 @@ void Game::setupGame() {
 			}
 
 			board->removeTile(location);
-			studio->attach(obs.at(location.first + 8 * location.second + 1));
-			studio->render();
-			studio->detach(obs.at(location.first + 8 * location.second + 1));
+			attach(obs.at(location.first + 8 * location.second + 1));
+			render();
+			detach(obs.at(location.first + 8 * location.second + 1));
 
 		} else if (arg1 == "="){
 			if (arg2 == "black") {
@@ -376,12 +375,8 @@ void Game::resetGame() {
 	board = new Board;
 
 	// reset the move history
-	delete history;
-	history = new History;
-
-	// reset the graphics
-	delete studio;
-	studio = new Studio{board};
+	//delete history;
+	//history = new History;
 
 	// reset and redisplay the observers
 	for (auto it = obs.begin(); it != obs.end(); ++it) {
@@ -391,15 +386,15 @@ void Game::resetGame() {
 
 	obs.erase(obs.begin(), obs.end());
 
-	Text *textScreen = new Text{studio};
+	Text *textScreen = new Text{this};
 
 	obs.push_back(textScreen);
-	studio->attach(textScreen);
+	attach(textScreen);
 	textScreen->notify();
 
 	for (int y = 0; y < 8; ++y) {
 		for (int x = 0; x < 8; ++x) {
-			Graphics *tileScreen = new Graphics{x, y, studio, window};
+			Graphics *tileScreen = new Graphics{x, y, this, window};
 			obs.push_back(tileScreen);
 			tileScreen->notify();
 		}

@@ -2,7 +2,7 @@
 #define _GRAPHICS_H_
 
 #include "observer.h"
-#include "studio.h"
+#include "game.h"
 #include "window.h"
 #include "tile.h"
 
@@ -12,12 +12,12 @@ class Graphics : public Observer {
   inline static bool displayed = false;
   const int tileSize = 75;
   const int border = 50;
-  Studio* studio;
+  Game* game;
   Xwindow* window;
   void displayLabels();
   void displayTile();
  public:
-  Graphics(int x, int y, Studio* studio, Xwindow* window);
+  Graphics(int x, int y, Game* game, Xwindow* window);
   void notify() override;
 };
 
