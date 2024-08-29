@@ -23,7 +23,7 @@ int main() {
             string input;
             getline(cin, input);
 
-            cout << endl;
+            cout << endl << endl;
 
             // if (setup)
 	        //     cout << "______________________________________________________________________" << endl << endl;
@@ -34,7 +34,6 @@ int main() {
                 }
 
                 game.setupGame();
-
 
 				cout << "Please start a game with the command 'game <white-player> <black-player>', or re-enter setup mode with 'setup'." << endl;
 
@@ -110,7 +109,7 @@ int main() {
                     return 0;
 
                 } else {
-                    cout << endl << "Start a new game with the command 'game <white-player> <black-player>' or 'setup', or quit by pressing 'Ctrl-D'." << endl;
+                    cout << "Start a new game with the command 'game <white-player> <black-player>' or 'setup', or quit by pressing 'Ctrl-D'." << endl;
                     break;
                 }
             }
