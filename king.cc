@@ -23,8 +23,8 @@ vector<pair<int, int>> King::possibleMoves(const pair<int, int> &posn, Board &bo
         
         piece = board.getTile(posn2); // Get the tile stored at posn2 of the board
 
-        // Simulate the move on a temporary board
-        incheck = simulateMove(posn, posn2, board, piece);
+        // simulate the move on a temporary board, check if it leaves the player in check
+        incheck = simulateMove(posn, posn2, board, piece);\
 
         if (!incheck){
             if(piece->getSymbol() != ' ' && piece->getSymbol() != '_'){
@@ -45,8 +45,9 @@ vector<pair<int, int>> King::possibleMoves(const pair<int, int> &posn, Board &bo
     }
 
     // Determine if castling is possible
-    if (((posn == make_pair(4, 0)) && (board.getTile(posn)->getSymbol() == 'K')) || ((posn == make_pair(4, 7)) && (board.getTile(posn)->getSymbol() == 'k')))
+    if (((posn == make_pair(4, 0)) && (board.getTile(posn)->getSymbol() == 'K')) || ((posn == make_pair(4, 7)) && (board.getTile(posn)->getSymbol() == 'k'))) {
         possibleCastles(posn, board, possibleMoves);
+    }
 
     // Return the possiblemoves
     return possibleMoves;

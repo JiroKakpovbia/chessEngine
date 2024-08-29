@@ -24,7 +24,7 @@ vector<pair<int, int>> Queen::possibleMoves(const pair<int, int> &posn, Board &b
             
             piece = board.getTile(posn2); // Get the tile stored at posn2 of the board
 
-            // Simulate the move on a temporary board
+            // simulate the move on a temporary board, check if it leaves the player in check
             incheck = simulateMove(posn, posn2, board, piece);
 
             if(!incheck){
@@ -32,14 +32,13 @@ vector<pair<int, int>> Queen::possibleMoves(const pair<int, int> &posn, Board &b
                     if(currTurn % 2 == 0){ // White turn
                         if(islower(piece->getSymbol())){
                             possibleMoves.push_back(posn2);
-                        } 
-                        break;
+                        }
                     } else { // Black turn
                         if(isupper(piece->getSymbol())){
                             possibleMoves.push_back(posn2);
                         } 
-                        break; 
                     }
+                    break;
                 }
                 possibleMoves.push_back(posn2);
             }

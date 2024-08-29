@@ -19,6 +19,6 @@ class Blank : public Tile {
       vector<pair<int, int>> vec;
       return vec;
     }
-    bool simulateMove(const pair<int, int> &posn1, const pair<int, int> &posn2, Board &board, Tile* piece) override { return false; }
+    bool simulateMove(const pair<int, int> &posn1, const pair<int, int> &posn2, const Board &board, Tile* piece) override { return false; }
 };
 #endif

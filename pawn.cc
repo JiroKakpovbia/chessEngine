@@ -1,4 +1,5 @@
 #include "pawn.h"
+#include <iostream>
 using namespace std;
 
 vector<pair<int, int>> Pawn::possibleMoves(const pair<int, int> &posn, Board &board){
@@ -34,22 +35,22 @@ vector<pair<int, int>> Pawn::possibleMoves(const pair<int, int> &posn, Board &bo
         // Simulate the move on a temporary board
         incheck = simulateMove(posn, posn2, board, piece);
 
-        if(!incheck){
-            if(dir.first != 0){ // Possible captures
-                if(piece->getSymbol() != ' ' && piece->getSymbol() != '_'){
-                    if(currTurn % 2 == 0){ // White turn
-                        if(islower(piece->getSymbol())){
+        if (!incheck) {
+            if (dir.first != 0) { // Possible captures
+                if (piece->getSymbol() != ' ' && piece->getSymbol() != '_') {
+                    if (currTurn % 2 == 0) { // White turn
+                        if (islower(piece->getSymbol()))
                             possibleMoves.push_back(posn2);
-                        } continue;
                     } else { // Black turn
-                        if(isupper(piece->getSymbol())){
-                        possibleMoves.push_back(posn2);
-                        } continue; 
+                        if (isupper(piece->getSymbol()))
+                            possibleMoves.push_back(posn2);
                     }
+                    continue;
                 }
-            } else if(piece->getSymbol() == ' ' || piece->getSymbol() == '_'){ // Possible forward moves
+            } else if (piece->getSymbol() == ' ' || piece->getSymbol() == '_') { // Possible forward moves
                 possibleMoves.push_back(posn2);
-            } continue;
+            }
+            continue;
         }
     }
 
@@ -70,14 +71,14 @@ void Pawn::possibleEnPassant(const pair<int, int> &posn, Board &board, vector<pa
     char oppPawn = (currTurn % 2 == 0) ? 'p' : 'P'; // Define a variable to store the opponent pawn char
     
     // Assign the directions based on current move
-    if (currTurn % 2 == 0){
+    if (currTurn % 2 == 0) {
         directions = {{1, 1}, {-1, 1}}; 
     } else {
         directions = {{1,-1}, {-1, -1}}; 
     }
 
     // Iterate through the directions and check if an en passant is available
-    for(const pair<int, int> &dir : directions){
+    for (const pair<int, int> &dir : directions) {
         posn2 = posn; 
         
         posn2.first += dir.first;
@@ -95,9 +96,9 @@ void Pawn::possibleEnPassant(const pair<int, int> &posn, Board &board, vector<pa
 
         posn2.second = posn.second;
 
-        if(!incheck){
-            if(piece->getSymbol() == oppPawn){
-                if (piece->getJustMoved() && piece->getJustMoved2()){
+        if (!incheck) {
+            if (piece->getSymbol() == oppPawn) {
+                if (piece->getJustMoved() && piece->getJustMoved2()) {
                     posn2.second += dir.second;
                     possiblemoves.push_back(posn2);
                 }

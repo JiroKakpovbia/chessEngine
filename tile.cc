@@ -1,12 +1,20 @@
 #include "tile.h"
+#include "king.h"
 #include <utility>
 #include <locale>
 #include <iostream>
 using namespace std;
 
+vector<pair<int, int>> Tile::possibleMoves(const pair<int, int> &posn, Board &board) {
+    vector<pair<int, int>> vec;
+    return vec;
+}
+
 vector<pair<int, int>> Tile::possibleCaptures(const pair<int, int> &posn, Board &board) {
     vector<pair<int, int>> possibleCaptures; // define variable for possible captures
+    isSimulating = true;
     vector<pair<int, int>> pMoves = possibleMoves(posn, board); // determine the possible moves
+    isSimulating = false;
 
     // determine which of the possible moves results in the capture of a piece
     for (auto m : pMoves) {
@@ -42,7 +50,7 @@ vector<pair<int, int>> Tile::possibleChecks(const pair<int, int> &posn, Board &b
         possiblecaptures = possibleCaptures(move, tempboard);
         for(const pair<int, int> &capture : possiblecaptures){
             piece = tempboard.getTile(capture);
-            
+
             if(piece->getSymbol() == opponentKing){
                 possibleChecks.push_back(move);
                 break; // Can not check multiple times in the same position
@@ -54,16 +62,17 @@ vector<pair<int, int>> Tile::possibleChecks(const pair<int, int> &posn, Board &b
     return possibleChecks;
 }
 
-bool Tile::simulateMove(const pair<int, int> &posn1, const pair<int, int> &posn2, Board &board, Tile* piece) {
+bool Tile::simulateMove(const pair<int, int> &posn1, const pair<int, int> &posn2, const Board &board, Tile* piece) {
+    if (isSimulating) return false; // prevents infinite recursion
+
     Board tempboard = board; // create temporary board as to not modify the original
-    
-    // execute the move on the temporary board
-    cout << "Simulating a move from [" << posn1.first + 1 << ", " << posn1.second + 1 << "] to [" << posn2.first + 1 << ", " << posn2.second + 1 << "]" << endl;
+
+    // simulate the move on a temporary board
     tempboard.removeTile(posn2);
-    piece = board.getTile(posn1);
+    piece = tempboard.getTile(posn1);
     tempboard.addTile(piece->getSymbol(), posn2);
     tempboard.removeTile(posn1);
 
-    // return false if the player is not in check on the temporary board
-    return (tempboard.inCheck(tempboard) > 0);
+    // return true if the player is in check, false otherwise
+    return (tempboard.inCheck(tempboard));
 }

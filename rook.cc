@@ -1,4 +1,5 @@
 #include "rook.h"
+#include <iostream>
 using namespace std;
 
 vector<pair<int, int>> Rook::possibleMoves(const pair<int, int> &posn, Board &board) {
@@ -23,7 +24,7 @@ vector<pair<int, int>> Rook::possibleMoves(const pair<int, int> &posn, Board &bo
             
             piece = board.getTile(posn2); // Get the tile stored at posn2 of the board
 
-            // Simulate the move on a temporary board
+            // simulate the move on a temporary board, check if it leaves the player in check
             incheck = simulateMove(posn, posn2, board, piece);
 
             if(!incheck){
