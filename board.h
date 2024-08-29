@@ -38,7 +38,7 @@ class Board {
     char makeMove(pair<int, int> from, pair<int, int> to, char promoSymbol = 'x');
     bool inCheck(Board temp);
     bool checkMate();
-    bool staleMate();
+    char draw();
 };
 
 #endif

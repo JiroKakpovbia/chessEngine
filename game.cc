@@ -60,7 +60,7 @@ void Game::startGame() {
 
 	Player *currPlayer;
 
-	while (!board->staleMate() && !board->checkMate()) {
+	while (!board->draw() && !board->checkMate()) {
 		currPlayer = (board->getCurrTurn() % 2 == 0) ? whitePlayer : blackPlayer; // determines the current player's turn
 
 		if (board->inCheck(*board)) { // checks to see if the current player is in check
@@ -234,11 +234,27 @@ void Game::startGame() {
 			cout << "White has won!" << endl;
 			window->drawString(400, 400, "White Wins!", Xwindow::Black);
 		}
-	} else if (board->staleMate()) {
+	} else if (board->draw()) {
 		whiteWins += 0.5;
 		blackWins += 0.5;
-		cout << "Stalemate!" << endl << endl;
-		cout << "It's a tie!" << endl;
+
+		char indicator = board->draw();
+
+		if (indicator == 'M') // no legal moves
+			cout << "Stalemate! No legal moves remain.";
+		else
+			cout << "Draw! ";
+
+		if (indicator == 'S') // insufficient material
+			cout << "Insufficient materials to obtain checkmate.";
+
+		else if (indicator == 'R') // three repeated moves
+			cout << "The same position has occured three times with the same player to move and all possible moves identical.";
+
+		else if (indicator == 'F') // fifty non-pawn moves
+			cout << "50 consecutive moves have been made by both players without any pawn movement or piece capture.";
+
+		cout << endl << endl << "It's a tie!" << endl;
 		window->drawString(70, 70, "Stalemate!", Xwindow::Black);
 
 	} else {
@@ -291,21 +307,22 @@ void Game::setupGame() {
 				continue;
 			}
 		} else if (arg1 == "clear") {
-			for (int y = 0; y < board->getBoardSize(); ++y) {
-				for (int x = 0; x < board->getBoardSize(); ++x) {
-					if ((board->getTile({y,x})->getSymbol() != '_') || (board->getTile({y,x})->getSymbol() != ' ')) {
-						board->removeTile({y,x});
+			for (int x = 0; x < board->getBoardSize(); ++x) {
+				for (int y = 0; y < board->getBoardSize(); ++y) {
+					if ((board->getTile({x, y})->getSymbol() != '_') || (board->getTile({x, y})->getSymbol() != ' ')) {
+						board->removeTile({x, y});
 						attach(obs.at(8 * y + x + 1));
 					}
 				}
 			}
 			render();
-			for (int y = 0; y < board->getBoardSize(); ++y) {
-				for (int x = 0; x < board->getBoardSize(); ++x) {
-					if ((board->getTile({y,x})->getSymbol() != '_') || (board->getTile({y,x})->getSymbol() != ' '))
+			for (int x = 0; x < board->getBoardSize(); ++x) {
+				for (int y = 0; y < board->getBoardSize(); ++y) {
+					if ((board->getTile({x, y})->getSymbol() != '_') || (board->getTile({x, y})->getSymbol() != ' '))
 						detach(obs.at(8 * y + x + 1));
 				}
 			}
+			cout << "______________________________________________________________________" << endl << endl;
 			continue;
 		}
 

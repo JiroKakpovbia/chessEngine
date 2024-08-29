@@ -457,14 +457,14 @@ bool Board::inCheck(Board temp) {
 
 // Returns true if the Player moving on turn "turn" is in checkmate
 bool Board::checkMate() {
-    if ((inCheck(*this) > 0) && staleMate())
+    if (inCheck(*this) && draw())
         return true;
 
     return false;
 }
 
 // Returns true if the current Player cannot make any moves
-bool Board::staleMate() {
+char Board::draw() {
     // check for no legal moves
     int numOfMoves = 0;
 
@@ -479,7 +479,76 @@ bool Board::staleMate() {
         }
     }
 
+    // check for insufficient material
+    vector<Tile*> whiteNoKing = getActiveWhite();
+    vector<Tile*> blackNoKing = getActiveBlack();
 
-    //cout << "End of Stalemate Check!" << endl;
-    return !numOfMoves || sufficient;
+    for (auto it = whiteNoKing.begin(); it != whiteNoKing.end() ; ++it) {
+        if (*it == whiteKing) {
+            whiteNoKing.erase(it);
+            break;
+        }
+    }
+
+    for (auto it = blackNoKing.begin(); it != blackNoKing.end() ; ++it) {
+        if (*it == blackKing) {
+            blackNoKing.erase(it);
+            break;
+        }
+    }
+
+    bool sufficient = true;
+
+    if ((whiteNoKing.size() == 0) && (blackNoKing.size() == 0)) { // King vs. King
+        sufficient = false;
+
+    } else if (((whiteNoKing.size() == 1) && (blackNoKing.size() == 0) &&
+    (whiteNoKing.back()->getSymbol() == 'B')) ||
+    ((whiteNoKing.size() == 0) && (blackNoKing.size() == 1) &&
+    (blackNoKing.back()->getSymbol() == 'b'))) { // King and Bishop vs. King
+        sufficient = false;
+
+    } else if (((whiteNoKing.size() == 1) && (blackNoKing.size() == 0) &&
+    (whiteNoKing.back()->getSymbol() == 'N')) ||
+    ((whiteNoKing.size() == 0) && (blackNoKing.size() == 1) &&
+    (blackNoKing.back()->getSymbol() == 'n'))) { // King and Knight vs. King
+        sufficient = false;
+
+    } else if (((whiteNoKing.size() == 2) && (blackNoKing.size() == 0) &&
+    (whiteNoKing.back()->getSymbol() == 'N') && (whiteNoKing.front()->getSymbol() == 'N')) ||
+    ((whiteNoKing.size() == 0) && (blackNoKing.size() == 2) &&
+    (blackNoKing.back()->getSymbol() == 'n') && (blackNoKing.front()->getSymbol() == 'n'))) { // King and Two Knights vs. King
+        sufficient = false;
+
+    } else if ((whiteNoKing.size() == 1) && (blackNoKing.size() == 1) &&
+    (whiteNoKing.size() == 1) && (blackNoKing.size() == 1) &&
+    (whiteNoKing.back()->getSymbol() == 'B') && (blackNoKing.back()->getSymbol() == 'b')) { // King and Bishop vs. King and Bishop (Same Colour Tile)
+        pair<int, int> whiteTile, blackTile;
+
+        for (int x = 0; x < boardSize; ++x) { // loop through the Board to check what colour tiles the bishops are on
+            for (int y = 0; y < boardSize; ++y) { 
+                if (getTile({x, y}) == whiteNoKing.back())
+                    whiteTile = {x, y};
+
+                if (getTile({x, y}) == blackNoKing.back())
+                    blackTile = {x, y};
+            }
+        }
+
+        if (((whiteTile.first + whiteTile.second) % 2) == ((blackTile.first + blackTile.second) % 2)) // check if the colours are the same
+            sufficient = false;
+    }
+
+    // check for 3 repeated moves
+
+
+    // check for 50 non-pawn moves
+
+
+    if (!numOfMoves) return 'M'; // indicator for No Legal Moves
+    if (!sufficient) return 'S'; // indicator for Insufficient Material
+    //if (!repeat) return 'R'; // indicator for Three Repeated Moves
+    // if (!fifty) return 'F'; // indicator for Fifty Non-Pawn Moves
+
+    return 0;
 }
