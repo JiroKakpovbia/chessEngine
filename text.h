@@ -2,14 +2,14 @@
 #define TEXT_H
 
 #include "observer.h"
-#include "game.h"
+#include "studio.h"
 #include "tile.h"
 
 class Text : public Observer {
-  Game* game;
+  Studio* studio;
   
  public:
-  Text(Game* game);
+  Text(Studio* studio);
   void notify() override;
 };
 

@@ -13,7 +13,7 @@ void History::addHistory(pair<int, int> beg, pair<int, int> end, char taken, boo
 	promoHistory.push(promo);
 }
 
-void History::undo(Board *board, Game *game, vector<Observer *> obs) {
+void History::undo(Board *board, Studio *studio, vector<Observer *> obs) {
 	if (moveHistory.empty()) {
 		return;
 	}
@@ -40,14 +40,14 @@ void History::undo(Board *board, Game *game, vector<Observer *> obs) {
 			board->removeTile(make_pair(6, 0));
 			board->removeTile(make_pair(5, 0));
 
-			game->attach(obs.at(8 * move.first.second + move.first.first + 1));
-			game->attach(obs.at(8));
-			game->attach(obs.at(7));
-			game->attach(obs.at(6));
-			game->render();
-			game->detach(obs.at(8));
-			game->detach(obs.at(7));
-			game->detach(obs.at(6));
+			studio->attach(obs.at(8 * move.first.second + move.first.first + 1));
+			studio->attach(obs.at(8));
+			studio->attach(obs.at(7));
+			studio->attach(obs.at(6));
+			studio->render();
+			studio->detach(obs.at(8));
+			studio->detach(obs.at(7));
+			studio->detach(obs.at(6));
 
 
 		} else if (end == "e1" && beg == "c1") {
@@ -55,30 +55,30 @@ void History::undo(Board *board, Game *game, vector<Observer *> obs) {
 			board->addTile('R', make_pair(0, 0));
 			board->removeTile(make_pair(2, 0));
             board->removeTile(make_pair(3, 0));
-			game->attach(obs.at(8 * move.first.second + move.first.first + 1));
-			game->attach(obs.at(1));
-			game->attach(obs.at(3));
-			game->attach(obs.at(4));
-			game->render();
-			game->detach(obs.at(8 * move.first.second + move.first.first + 1));
-			game->detach(obs.at(1));
-			game->detach(obs.at(3));
-			game->detach(obs.at(4));
+			studio->attach(obs.at(8 * move.first.second + move.first.first + 1));
+			studio->attach(obs.at(1));
+			studio->attach(obs.at(3));
+			studio->attach(obs.at(4));
+			studio->render();
+			studio->detach(obs.at(8 * move.first.second + move.first.first + 1));
+			studio->detach(obs.at(1));
+			studio->detach(obs.at(3));
+			studio->detach(obs.at(4));
 
 		} else if (end == "e8" && beg == "g8") {
 			board->addTile('k',move.first);
             board->addTile('r', make_pair(7, 7));
             board->removeTile(make_pair(6, 7));
             board->removeTile(make_pair(5, 7));
-			game->detach(obs.at(8 * move.first.second + move.first.first + 1));
-			game->attach(obs.at(8 * 7 + 8));
-			game->attach(obs.at(8 * 7 + 7));
-			game->attach(obs.at(8 * 7 + 6));
-			game->render();
-			game->detach(obs.at(8 * move.first.second + move.first.first + 1));
-			game->detach(obs.at(8 * 7 + 8));
-			game->detach(obs.at(8 * 7 + 7));
-			game->detach(obs.at(8 * 7 + 6));
+			studio->detach(obs.at(8 * move.first.second + move.first.first + 1));
+			studio->attach(obs.at(8 * 7 + 8));
+			studio->attach(obs.at(8 * 7 + 7));
+			studio->attach(obs.at(8 * 7 + 6));
+			studio->render();
+			studio->detach(obs.at(8 * move.first.second + move.first.first + 1));
+			studio->detach(obs.at(8 * 7 + 8));
+			studio->detach(obs.at(8 * 7 + 7));
+			studio->detach(obs.at(8 * 7 + 6));
 
 
 		} else if (end == "e8" && beg=="g8") {
@@ -86,38 +86,38 @@ void History::undo(Board *board, Game *game, vector<Observer *> obs) {
             board->addTile('r', make_pair(0, 7));
             board->removeTile(make_pair(2, 7));
             board->removeTile(make_pair(3, 7));
-			game->detach(obs.at(8 * move.first.second + move.first.first + 1));
-			game->attach(obs.at(8 * 7 + 1));
-			game->attach(obs.at(8 * 7 + 3));
-			game->attach(obs.at(8 * 7 + 4));
-			game->render();
-			game->detach(obs.at(8 * move.first.second + move.first.first + 1));
-			game->detach(obs.at(8 * 7 + 1));
-			game->detach(obs.at(8 * 7 + 3));
-			game->detach(obs.at(8 * 7 + 4));
+			studio->detach(obs.at(8 * move.first.second + move.first.first + 1));
+			studio->attach(obs.at(8 * 7 + 1));
+			studio->attach(obs.at(8 * 7 + 3));
+			studio->attach(obs.at(8 * 7 + 4));
+			studio->render();
+			studio->detach(obs.at(8 * move.first.second + move.first.first + 1));
+			studio->detach(obs.at(8 * 7 + 1));
+			studio->detach(obs.at(8 * 7 + 3));
+			studio->detach(obs.at(8 * 7 + 4));
 		}
 	} else if (tile == 'e' || tile == 'E') {
 		int x = move.second.first;
 		int y = move.first.second;
 		board->makeMove(move.second, move.first);
-		game->attach(obs.at(8 * move.second.second + move.second.first + 1));
-		game->attach(obs.at(8 * move.first.second + move.first.first + 1));
-		game->attach(obs.at(8 * y + x + 1));
+		studio->attach(obs.at(8 * move.second.second + move.second.first + 1));
+		studio->attach(obs.at(8 * move.first.second + move.first.first + 1));
+		studio->attach(obs.at(8 * y + x + 1));
 		if (board->getTile(move.first)->getSymbol() == 'p') {
 			board->addTile('P', make_pair(x, y));
-			game->detach(obs.at(8 * y + x + 1));
+			studio->detach(obs.at(8 * y + x + 1));
 		} else {
 			board->addTile('p', make_pair(x, y));
 		}
-		game->render();
-		game->detach(obs.at(8 * move.second.second + move.second.first + 1));
-		game->detach(obs.at(8 * move.first.second + move.first.first + 1));
-		game->detach(obs.at(8 * y + x + 1));
+		studio->render();
+		studio->detach(obs.at(8 * move.second.second + move.second.first + 1));
+		studio->detach(obs.at(8 * move.first.second + move.first.first + 1));
+		studio->detach(obs.at(8 * y + x + 1));
 
 	} else if (promo) { // promotion
 		board->makeMove(move.second, move.first);
-		game->attach(obs.at(8 * move.first.second + move.first.first + 1));
-		game->attach(obs.at(8 * move.second.second + move.second.first + 1));
+		studio->attach(obs.at(8 * move.first.second + move.first.first + 1));
+		studio->attach(obs.at(8 * move.second.second + move.second.first + 1));
 		if (tile != ' ') {
 			board->addTile(tile, move.second);
 		}
@@ -126,18 +126,18 @@ void History::undo(Board *board, Game *game, vector<Observer *> obs) {
 		} else {
 			board->addTile('p', move.first);
 		}	
-		game->render();
-		game->detach(obs.at(8 * move.first.second + move.first.first + 1));
-		game->detach(obs.at(8 * move.second.second + move.second.first + 1));
+		studio->render();
+		studio->detach(obs.at(8 * move.first.second + move.first.first + 1));
+		studio->detach(obs.at(8 * move.second.second + move.second.first + 1));
 	} else {
 		board->makeMove(move.second, move.first);
 		if (tile != ' ') {
 			board->addTile(tile, move.second);
 		}	
-		game->attach(obs.at(8 * move.first.second + move.first.first + 1));
-		game->attach(obs.at(8 * move.second.second + move.second.first + 1));
-		game->render();
-		game->detach(obs.at(8 * move.first.second + move.first.first + 1));
-		game->detach(obs.at(8 * move.second.second + move.second.first + 1));
+		studio->attach(obs.at(8 * move.first.second + move.first.first + 1));
+		studio->attach(obs.at(8 * move.second.second + move.second.first + 1));
+		studio->render();
+		studio->detach(obs.at(8 * move.first.second + move.first.first + 1));
+		studio->detach(obs.at(8 * move.second.second + move.second.first + 1));
 	}
 }

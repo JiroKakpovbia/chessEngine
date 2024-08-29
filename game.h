@@ -4,15 +4,17 @@
 #include "subject.h"
 #include "board.h"
 #include "player.h"
-//#include "history.h"
+#include "history.h"
+#include "studio.h"
 #include "window.h"
 using namespace std;
 
-class Game : public Subject {
+class Game {
 	Player *whitePlayer;
 	Player *blackPlayer;
 	Board *board;
-	//History *history;
+	History *history;
+	Studio *studio;
 	vector<Observer *> obs;
 	Xwindow *window;
 	static inline float whiteWins = 0;
@@ -32,7 +34,6 @@ public:
 	int gamesPlayed() { return (whiteWins + blackWins); }
 	void finish() { final = true; }
 	bool getFinish() { return final; }
-  	void render() { notifyObservers(); };
 };
 
 #endif

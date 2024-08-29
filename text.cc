@@ -2,10 +2,10 @@
 #include <iostream>
 using namespace std;
 
-Text::Text(Game* game) : game{game} {}
+Text::Text(Studio* studio) : studio{studio} {}
 
 void Text::notify() {
-    auto board = game->getBoard()->getBoard();
+    auto board = studio->board()->getBoard();
     cout << endl << "   abcdefgh" << endl << endl; // print column numbers
     for (int y = 7; y >= 0; --y) {
         cout << (y + 1) << "  "; // print row numbers
