@@ -167,16 +167,16 @@ void Game::startGame() {
 			if ((input.size() == 4) && ((board->getTile(end)->getSymbol() == promo))) { // output if the move was a promotion
 				cout << ", and promoted their pawn to a ";
 
-				if (board->getTile(end)->getSymbol() == 'B') {
+				if ((board->getTile(end)->getSymbol() == 'B') || (board->getTile(end)->getSymbol() == 'b')) {
 					cout << "Bishop";
 
-				} else if (board->getTile(end)->getSymbol() == 'Q') {
+				} else if ((board->getTile(end)->getSymbol() == 'Q') || (board->getTile(end)->getSymbol() == 'q')) {
 					cout << "Queen";
 
-				} else if (board->getTile(end)->getSymbol() == 'R') {
+				} else if ((board->getTile(end)->getSymbol() == 'R') || (board->getTile(end)->getSymbol() == 'r')) {
 					cout << "Rook";
 
-				} else if (board->getTile(end)->getSymbol() == 'N') {
+				} else if ((board->getTile(end)->getSymbol() == 'N') || (board->getTile(end)->getSymbol() == 'n')) {
 					cout << "Knight";
 				}
 			}
@@ -311,7 +311,7 @@ void Game::setupGame() {
 				for (int y = 0; y < board->getBoardSize(); ++y) {
 					if ((board->getTile({x, y})->getSymbol() != '_') || (board->getTile({x, y})->getSymbol() != ' ')) {
 						board->removeTile({x, y});
-						studio->attach(obs.at(8 * y + x + 1));
+						studio->attach(obs.at(8 * x + y + 1));
 					}
 				}
 			}
@@ -319,7 +319,7 @@ void Game::setupGame() {
 			for (int x = 0; x < board->getBoardSize(); ++x) {
 				for (int y = 0; y < board->getBoardSize(); ++y) {
 					if ((board->getTile({x, y})->getSymbol() != '_') || (board->getTile({x, y})->getSymbol() != ' '))
-						studio->detach(obs.at(8 * y + x + 1));
+						studio->detach(obs.at(8 * x + y + 1));
 				}
 			}
 			cout << "______________________________________________________________________" << endl << endl;
