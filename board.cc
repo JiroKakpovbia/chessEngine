@@ -15,7 +15,7 @@
 using namespace std;
 
 // Board Constructor
-Board::Board() : currTurn{0}, theBoard{new vector<vector<Tile*>>(boardSize, vector<Tile*>(boardSize, nullptr))} {
+Board::Board() : currTurn{0}, theBoard{new vector<vector<Tile*>>(boardSize, vector<Tile*>(boardSize, nullptr))}, whiteKing{nullptr}, blackKing{nullptr} {
     // initialize the Board
     for (int y = 0; y < boardSize; ++y) {
 		for (int x = 0; x < boardSize; ++x) {
@@ -62,6 +62,10 @@ Board::Board(const Board &other) : currTurn{other.currTurn} {
     for (int x = 0; x < other.boardSize; ++x) {
 		for (int y = 0; y < other.boardSize; ++y) {
             addTile(other.getTile({x, y})->getSymbol(), {x, y}); // copy each tile from the other Board
+            if (other.getTile({x, y})->getSymbol() == 'K')
+                whiteKing = getTile({x, y});
+            else if (other.getTile({x, y})->getSymbol() == 'k')
+                blackKing = getTile({x, y});
 		}
 	}
 
@@ -86,8 +90,10 @@ Board::Board(const Board &other) : currTurn{other.currTurn} {
 
 // Board Move Constructor
 Board::Board(Board &&other)
-    : currTurn{other.currTurn}, theBoard{other.theBoard}, activeWhite{move(other.activeWhite)}, activeBlack{move(other.activeBlack)}, capturedBlack{move(other.capturedBlack)}, capturedWhite{move(other.capturedWhite)} {
+    : currTurn{other.currTurn}, theBoard{other.theBoard}, whiteKing{other.whiteKing}, blackKing{other.blackKing}, activeWhite{move(other.activeWhite)}, activeBlack{move(other.activeBlack)}, capturedBlack{move(other.capturedBlack)}, capturedWhite{move(other.capturedWhite)} {
         other.theBoard = nullptr;
+        whiteKing = nullptr;
+        blackKing = nullptr;
     }
 
 // Board Copy Assignment
@@ -116,6 +122,10 @@ Board &Board::operator=(const Board &other) {
     for (int x = 0; x < boardSize; ++x) {
 		for (int y = 0; y < boardSize; ++y) {
             addTile(other.getTile({x, y})->getSymbol(), {x, y}); // copy each tile from the other Board
+            if (other.getTile({x, y})->getSymbol() == 'K')
+                whiteKing = getTile({x, y});
+            else if (other.getTile({x, y})->getSymbol() == 'k')
+                blackKing = getTile({x, y});
 		}
 	}
 
@@ -162,12 +172,16 @@ Board &Board::operator=(Board &&other) {
     // initialized values from the MIL
     currTurn = other.currTurn;
     theBoard = other.theBoard;
+    whiteKing = other.whiteKing;
+    blackKing = other.blackKing;
     activeWhite = move(other.activeWhite);
     activeBlack = move(other.activeBlack);
     capturedBlack = move(other.capturedBlack);
     capturedWhite = move(other.capturedWhite);
 
     other.theBoard = nullptr;
+    whiteKing = nullptr;
+    blackKing = nullptr;
 
     return *this;
 }
@@ -215,8 +229,10 @@ void Board::addTile(char symbol, pair<int, int> tileCoords) {
     else if ((symbol == 'k') || (symbol  == 'K')) { // check if we want to add a King
         theBoard->at(tileCoords.first).at(tileCoords.second) = new King(symbol);
         if (symbol == 'k') { // check if King is Black
+            blackKing = getTile(tileCoords);
             activeBlack.push_back(getTile(tileCoords));
         } else {
+            whiteKing = getTile(tileCoords);
             activeWhite.push_back(getTile(tileCoords));
         }
     }
@@ -254,17 +270,17 @@ char Board::makeMove(pair<int, int> from, pair<int, int> to, char promoSymbol) {
     bool promo = false;
 
     // reset the justMoved2 field for all pawns
-    vector<Tile*> activePieces = (currTurn % 2 == 0) ? getActiveWhite() : getActiveBlack();
+    vector<Tile*> activePieces = (currTurn % 2 == 0) ? getActiveWhite() : getActiveBlack(); // change the pieces depending on the current Player's turn
     for (unsigned x = 0; x < activePieces.size(); ++x) {
-        if ((activePieces[x]->getSymbol() == 'p') || (activePieces[x]->getSymbol() == 'P')) {
-            activePieces[x]->setJustMoved2(false);
+        if ((activePieces.at(x)->getSymbol() == 'p') || (activePieces.at(x)->getSymbol() == 'P')) {
+            activePieces.at(x)->setJustMoved2(false);
         }
     }
     
     // set all tiles to not moved
     for (unsigned x = 0; x < activePieces.size(); ++x) {
-        if (dynamic_cast<Blank *>(activePieces[x]) == nullptr) {
-            activePieces[x]->setJustMoved(false);
+        if (dynamic_cast<Blank *>(activePieces.at(x)) == nullptr) {
+            activePieces.at(x)->setJustMoved(false);
         }
     }
 
@@ -379,40 +395,64 @@ char Board::makeMove(pair<int, int> from, pair<int, int> to, char promoSymbol) {
         addTile(promoSymbol, to);
     }
 
+    // check if this move results in the opposite king being in check
+    // Tile* oppKing = ((currTurn % 2) == 0) ? blackKing : whiteKing;
+    // pair<int, int> oppKingTile;
+
+    // for (int x = 0; x < boardSize; ++x) { // loop through the Board to find the opponent's king
+    //     for (int y = 0; y < boardSize; ++y) {
+    //         if (getTile({x, y}) == oppKing)
+    //             oppKingTile = {x, y};
+    //     }
+    // }
+
+    // // loop through the active pieces, and determine if any of them check the opposing king
+    // for (auto p : activePieces) {
+    //     auto pCaptures = p->possibleCaptures(to, *this);
+
+    //     if (find(pCaptures.begin(), pCaptures.end(), oppKingTile) != pCaptures.end()) // if one of the piece's captures is the opponent's king
+    //         dynamic_cast<King*>(oppKing)->incCheckedBy(1);
+    // }
+
     return indicator;
 }
 
 // Returns the number of pieces that put the current Player in check
-int Board::inCheck(Board temp) {
-    int numOfChecks = 0;
-    char king = ((currTurn % 2) == 1) ? 'k' : 'K'; // change the king depending on the current Player's turn
-    vector<char> pieces = ((currTurn % 2) == 1) ? vector{'r', 'n', 'b', 'q', 'p'} : vector{'R', 'N', 'B', 'Q', 'P'}; // change the pieces depending on the current Player's turn
+bool Board::inCheck(Board temp) {
+    Tile* king = ((currTurn % 2) == 0) ? whiteKing : blackKing; // change the king depending on the current Player's turn
+    
+    // find the tile of the king
+    pair<int, int> kingTile;
 
-    for (int x = 0; x < temp.boardSize; ++x) { // loop through the temporary board and search for the King
-        for (int y = 0; y < temp.boardSize; ++y) {
-            if (temp.theBoard->at(x).at(y)->getSymbol() == king) {
-                for (char piece : pieces) { // loop through the different possible Pieces
-                    // replace the King with a specific Piece
-                    temp.removeTile({x, y});
-                    temp.addTile(piece, {x, y});
+    for (int x = 0; x < boardSize; ++x) { // loop through the Board to find the king
+        for (int y = 0; y < boardSize; ++y) {
+            if (getTile({x, y}) == king)
+                kingTile = {x, y};
+        }
+    }
 
-                    // the possible captures that each Piece would make in the same position as the King
-                    vector<pair<int, int>> captures = temp.getTile({x, y})->possibleCaptures({x, y}, temp);
+    vector<char> pieces = ((currTurn % 2) == 0) ? vector{'R', 'N', 'B', 'Q', 'P'} : vector{'r', 'n', 'b', 'q', 'p'}; // change the pieces depending on the current Player's turn
 
-                    // check if any of those possible captures by a Piece would result in capturing another one of that same Piece
-                    for (auto& capture : captures) {
-                        piece = (currTurn % 2 == 1) ? toupper(piece) : tolower(piece);
-                        if (temp.theBoard->at(capture.first).at(capture.second)->getSymbol() == piece) {
-                            ++numOfChecks; // if so, the King is in check by the subsequent Piece
-                        }
-                    }
-                }
-                break; // break once the king is found
+    for (char p : pieces) { // loop through the different possible Pieces
+        // replace the King with a specific Piece
+        temp.removeTile(kingTile);
+        temp.addTile(p, kingTile);
+
+        // the possible captures that each Piece would make in the same position as the King
+        //cout << "Checking Captures for " << piece << endl;
+        vector<pair<int, int>> captures = temp.getTile(kingTile)->possibleCaptures(kingTile, temp);
+
+        // check if any of those possible captures by a Piece would result in capturing another one of that same Piece
+        for (auto& c : captures) {
+            p = (currTurn % 2 == 0) ? tolower(p) : toupper(p);
+            if (temp.theBoard->at(c.first).at(c.second)->getSymbol() == p) {
+                return true; // if so, the King is in check by the subsequent Piece
             }
         }
     }
+
     // there are no possible moves that would put the King in check
-    return numOfChecks;
+    return false;
 }
 
 // Returns true if the Player moving on turn "turn" is in checkmate
@@ -425,16 +465,21 @@ bool Board::checkMate() {
 
 // Returns true if the current Player cannot make any moves
 bool Board::staleMate() {
+    // check for no legal moves
     int numOfMoves = 0;
+
+    vector<Tile*> activePieces = ((currTurn % 2) == 0) ? activeWhite : activeBlack; // change the pieces depending on the current Player's turn
 
     for (int x = 0; x < boardSize; ++x) { // loop through the Board to check if any moves can be made depending on whose turn it is to play
         for (int y = 0; y < boardSize; ++y) { 
-            if ((((currTurn % 2) == 1) && (islower(getTile({x, y})->getSymbol())))  // the Black Player's turn
-            || (((currTurn % 2) == 0) && (isupper(getTile({x, y})->getSymbol())))) {  // the White Player's turn
+            if (find(activePieces.begin(), activePieces.end(), getTile({x, y})) != activePieces.end()) {
+                //cout << endl << "Piece Check." << endl;
                 numOfMoves += getTile({x, y})->possibleMoves({x, y}, *this).size();
             }
         }
     }
 
-    return !numOfMoves;
+
+    //cout << "End of Stalemate Check!" << endl;
+    return !numOfMoves || sufficient;
 }

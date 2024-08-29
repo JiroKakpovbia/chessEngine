@@ -11,6 +11,8 @@ class Board {
     inline static const int boardSize = 8;
     int currTurn;
     vector<vector<Tile*>> *theBoard;
+    Tile* whiteKing;
+    Tile* blackKing;
     vector<Tile*> activeWhite;
     vector<Tile*> activeBlack;
     vector<Tile*> capturedBlack;
@@ -26,13 +28,15 @@ class Board {
     int getCurrTurn() const { return currTurn; }
     int getBoardSize() const { return boardSize; }
     vector<vector<Tile*>> getBoard() const { return *theBoard; }
+    Tile* getWhiteKing() { return whiteKing; }
+    Tile* getBlackKing() { return blackKing; }
     vector<Tile*> getActiveWhite() const { return activeWhite; }
     vector<Tile*> getActiveBlack() const { return activeBlack; }
     Tile* getTile(pair<int, int> tileCoords) const { return theBoard->at(tileCoords.first).at(tileCoords.second); }
     void addTile(char symbol, pair<int, int> tileCoords);
     void removeTile(pair<int, int> tileCoords);
     char makeMove(pair<int, int> from, pair<int, int> to, char promoSymbol = 'x');
-    int inCheck(Board temp);
+    bool inCheck(Board temp);
     bool checkMate();
     bool staleMate();
 };

@@ -60,10 +60,10 @@ void Game::startGame() {
 
 	Player *currPlayer;
 
-	while (!board->checkMate() && !board->staleMate()) {
+	while (!board->staleMate() && !board->checkMate()) {
 		currPlayer = (board->getCurrTurn() % 2 == 0) ? whitePlayer : blackPlayer; // determines the current player's turn
 
-		if (board->inCheck(*board) > 0) { // checks to see if the current player is in check
+		if (board->inCheck(*board)) { // checks to see if the current player is in check
 			string checkedPlayer = (currPlayer == whitePlayer) ? "White" : "Black";
 			cout << checkedPlayer << " is in check!" << endl;
 		}
