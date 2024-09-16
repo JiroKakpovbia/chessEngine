@@ -66,10 +66,10 @@ bool Tile::simulateMove(const pair<int, int> &posn1, const pair<int, int> &posn2
     if (isSimulating) return false; // prevents infinite recursion
 
     Board tempboard = board; // create temporary board as to not modify the original
+    Tile *piece = tempboard.getTile(posn1);
 
     // simulate the move on a temporary board
     tempboard.removeTile(posn2);
-    Tile *piece = tempboard.getTile(posn1);
     tempboard.addTile(piece->getSymbol(), posn2);
     tempboard.removeTile(posn1);
 

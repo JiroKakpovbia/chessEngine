@@ -53,9 +53,7 @@ vector<pair<int, int>> King::possibleMoves(const pair<int, int> &posn, Board &bo
     }
 
     // Determine if castling is possible
-    if (((posn == make_pair(4, 0)) && (board.getTile(posn)->getSymbol() == 'K')) || ((posn == make_pair(4, 7)) && (board.getTile(posn)->getSymbol() == 'k'))) {
-        possibleCastles(posn, board, possibleMoves);
-    }
+    possibleCastles(posn, board, possibleMoves);
 
     // Return the possiblemoves
     return possibleMoves;
