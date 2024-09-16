@@ -10,7 +10,7 @@ Player *&Game::getPlayer(int playerNum) {
 	return blackPlayer;
 }
 
-Game::Game (Player *white, Player *black, Xwindow *window): whitePlayer{white}, blackPlayer{black}, board{new Board}, history{new History}, studio{new Studio{board}}, window{window} {
+Game::Game (Player *white, Player *black): whitePlayer{white}, blackPlayer{black}, board{new Board}, history{new History}, studio{new Studio{board}}, window{new Xwindow{700, 700}} {
 	cout << "______________________________________________________________________" << endl << endl;
 	cout << "Welcome to Chess! Please wait while the board is being constructed..." << endl;
 	
@@ -37,7 +37,10 @@ Game::~Game() {
 	delete history;
 	delete whitePlayer;
 	delete blackPlayer;
+	delete studio;
+	delete window;
 
+	// delete observers (text and graphical displays)
 	for (auto it = obs.begin(); it != obs.end(); ++it) {
       delete *it;
   	}
@@ -86,7 +89,9 @@ void Game::startGame() {
 				break;
 
 			} else if (input.at(0) == "undo") { // if a Player undoes their move, update the board history
-				history->undo(board, studio, obs);
+				bool undid = history->undo(board, studio, obs);
+				if (!undid)
+					cout << "Improper command: there are no more moves to undo.";
 				continue;
 			}
 		}
@@ -132,7 +137,7 @@ void Game::startGame() {
 
 		if ((input.size() == 3) || (input.size() == 4)) {
 			char returned;
-			char promo;
+			char promo = 'X';
 
 			if (input.size() == 3) {
 				returned = board->makeMove(beg, end); // no pawn promotion
@@ -153,7 +158,7 @@ void Game::startGame() {
 			}
 			
 			// add the valid move to the move history
-			history->addHistory(beg, end, returned, false);
+			history->addHistory(beg, end, returned, promo);
 
 			// output the move that was made
 			string colour = (currPlayer == whitePlayer) ? "White" : "Black";
@@ -222,17 +227,17 @@ void Game::startGame() {
 
 	if (board->checkMate()) {
 		cout << "Checkmate!" << endl << endl;	
-		window->drawString(400, 400, "Checkmate!", Xwindow::Black);
+		//window->drawString(400, 400, "Checkmate!", Xwindow::Black);
 
 		if (currPlayer == whitePlayer) {
 			++blackWins;
 			cout << "Black has won!" << endl;
-			window->drawString(400, 400, "Black Wins!", Xwindow::Black);
+			//window->drawString(400, 400, "Black Wins!", Xwindow::Black);
 
 		} else {
 			++whiteWins;
 			cout << "White has won!" << endl;
-			window->drawString(400, 400, "White Wins!", Xwindow::Black);
+			//window->drawString(400, 400, "White Wins!", Xwindow::Black);
 		}
 	} else if (board->draw()) {
 		whiteWins += 0.5;
@@ -255,20 +260,20 @@ void Game::startGame() {
 			cout << "50 consecutive moves have been made by both players without any pawn movement or piece capture.";
 
 		cout << endl << endl << "It's a tie!" << endl;
-		window->drawString(70, 70, "Stalemate!", Xwindow::Black);
+		//window->drawString(70, 70, "Stalemate!", Xwindow::Black);
 
 	} else {
 		if (currPlayer == whitePlayer) {
 			++blackWins;
 			cout << endl << endl << "White has resigned." << endl << endl;
 			cout << "Black has won!" << endl;
-			window->drawString(400, 400, "Black Wins!", Xwindow::Black);
+			//window->drawString(400, 400, "Black Wins!", Xwindow::Black);
 
 		} else {
 			++whiteWins;
 			cout << endl << endl << "Black has resigned." << endl << endl;
 			cout << "White has won!" << endl;
-			window->drawString(400, 400, "White Wins!", Xwindow::Black);
+			//window->drawString(400, 400, "White Wins!", Xwindow::Black);
 		}
 	}
 
@@ -401,11 +406,23 @@ void Game::resetGame() {
 
 	// reset the board
 	delete board;
+	board = nullptr;
 	board = new Board;
 
 	// reset the move history
 	delete history;
+	history = nullptr;
 	history = new History();
+
+	// reset the studio
+	delete studio;
+	studio = nullptr;
+	studio = new Studio{board};
+
+	// reset the window
+	delete window;
+	window = nullptr;
+	window = new Xwindow{700, 700};
 
 	// reset and redisplay the observers
 	for (auto it = obs.begin(); it != obs.end(); ++it) {

@@ -84,12 +84,21 @@ void Xwindow::drawString(int x, int y, string msg, int colour) {
     f = fStruct->fid;
   }
 
+  // draw the text
   XTextItem ti;
   ti.chars = const_cast<char*>(msg.c_str());
   ti.nchars = msg.length();
   ti.delta = 0;
   ti.font = f;
   XDrawText(d, w, gc, x, y, &ti, 1);
+
+  // reset the foreground color to black
   XSetForeground(d, gc, colours[Black]);
   XFlush(d);
+
+  if (fStruct) {
+        XFreeFont(d, fStruct);  // free the font structure if it was loaded
+    } else {
+        XUnloadFont(d, f);  // unload the default font
+    }
 }

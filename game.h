@@ -24,7 +24,7 @@ class Game {
 	void simplePrint(pair<int, int> beg, pair<int, int> end);
 	static inline bool final = false;
 public:
-	Game(Player *white, Player *black, Xwindow *window);
+	Game(Player *white, Player *black);
 	~Game();
 	Player *&getPlayer(int playerNum);
 	void startGame();

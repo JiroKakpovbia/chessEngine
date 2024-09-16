@@ -12,8 +12,7 @@ using namespace std;
 
 int main() {
     // grab inputs repeatedly looking for "setup" or "game <white-player> <black-player>"
-    Xwindow *window = new Xwindow(700, 700);
-    Game game = Game{nullptr, nullptr, window};
+    Game game = Game{nullptr, nullptr};
 
     while (true) {
         bool setup = false;
@@ -38,7 +37,6 @@ int main() {
 				cout << "Please start a game with the command 'game <white-player> <black-player>', or re-enter setup mode with 'setup'." << endl;
 
                 if (game.getFinish()) {
-                    delete window;
                     return 0;
                 }
 
@@ -55,7 +53,6 @@ int main() {
 
                 if (args.size() == 0){ 
                     game.finish();
-                    delete window;
                     return 0;
                 }
 
@@ -105,7 +102,6 @@ int main() {
                 game.startGame();
 
                 if (game.getFinish()) {
-                    delete window;
                     return 0;
 
                 } else {
