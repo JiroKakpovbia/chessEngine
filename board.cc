@@ -69,28 +69,28 @@ Board::Board(const Board &other) : currTurn{other.currTurn} {
 		}
 	}
 
-    // copy the captured Black pieces from the other board (don't need to clone (deep copy) as Tile-specific variables don't matter (already captured))
-    for (auto* piece : other.capturedBlack) {
-        if (piece->getSymbol() == 'r') capturedBlack.push_back(new Rook('r'));
-        else if (piece->getSymbol() == 'n') capturedBlack.push_back(new Knight('n'));
-        else if (piece->getSymbol() == 'b') capturedBlack.push_back(new Bishop('b'));
-        else if (piece->getSymbol() == 'q') capturedBlack.push_back(new Queen('q'));
-        else if (piece->getSymbol() == 'p') capturedBlack.push_back(new Pawn('p'));
-    }
+    // // copy the captured Black pieces from the other board (don't need to clone (deep copy) as Tile-specific variables don't matter (already captured))
+    // for (auto* piece : other.capturedBlack) {
+    //     if (piece->getSymbol() == 'r') capturedBlack.push_back(new Rook('r'));
+    //     else if (piece->getSymbol() == 'n') capturedBlack.push_back(new Knight('n'));
+    //     else if (piece->getSymbol() == 'b') capturedBlack.push_back(new Bishop('b'));
+    //     else if (piece->getSymbol() == 'q') capturedBlack.push_back(new Queen('q'));
+    //     else if (piece->getSymbol() == 'p') capturedBlack.push_back(new Pawn('p'));
+    // }
 
-    // copy the captured White pieces from the other Board
-    for (auto* piece : other.capturedWhite) {
-        if (piece->getSymbol() == 'R') capturedWhite.push_back(new Rook('R'));
-        else if (piece->getSymbol() == 'N') capturedWhite.push_back(new Knight('N'));
-        else if (piece->getSymbol() == 'B') capturedWhite.push_back(new Bishop('B'));
-        else if (piece->getSymbol() == 'Q') capturedWhite.push_back(new Queen('Q'));
-        else if (piece->getSymbol() == 'P') capturedWhite.push_back(new Pawn('P'));
-    }
+    // // copy the captured White pieces from the other Board
+    // for (auto* piece : other.capturedWhite) {
+    //     if (piece->getSymbol() == 'R') capturedWhite.push_back(new Rook('R'));
+    //     else if (piece->getSymbol() == 'N') capturedWhite.push_back(new Knight('N'));
+    //     else if (piece->getSymbol() == 'B') capturedWhite.push_back(new Bishop('B'));
+    //     else if (piece->getSymbol() == 'Q') capturedWhite.push_back(new Queen('Q'));
+    //     else if (piece->getSymbol() == 'P') capturedWhite.push_back(new Pawn('P'));
+    // }
 }
 
 // Board Move Constructor
 Board::Board(Board &&other)
-    : currTurn{other.currTurn}, theBoard{other.theBoard}, whiteKing{other.whiteKing}, blackKing{other.blackKing}, activeWhite{move(other.activeWhite)}, activeBlack{move(other.activeBlack)}, capturedBlack{move(other.capturedBlack)}, capturedWhite{move(other.capturedWhite)} {
+    : currTurn{other.currTurn}, theBoard{other.theBoard}, whiteKing{other.whiteKing}, blackKing{other.blackKing}, activeWhite{move(other.activeWhite)}, activeBlack{move(other.activeBlack)} { //, capturedBlack{move(other.capturedBlack)}, capturedWhite{move(other.capturedWhite)} {
         other.theBoard = nullptr;
         whiteKing = nullptr;
         blackKing = nullptr;
@@ -111,8 +111,8 @@ Board &Board::operator=(const Board &other) {
     // clear the lists of the active and captured pieces on the Board
     activeWhite.clear();
     activeBlack.clear();
-    capturedBlack.clear();
-    capturedWhite.clear();
+    // capturedBlack.clear();
+    // capturedWhite.clear();
 
     // rest is the same as the Copy Constructor
     currTurn = other.currTurn;
@@ -129,23 +129,23 @@ Board &Board::operator=(const Board &other) {
 		}
 	}
 
-    // copy the captured Black pieces from the other board (don't need to clone (deep copy) as Tile-specific variables don't matter (already captured))
-    for (auto* piece : other.capturedBlack) {
-        if (piece->getSymbol() == 'r') capturedBlack.push_back(new Rook('r')); // don't need to clone (deep copy) as Tile-specific variables don't matter (already captured)
-        else if (piece->getSymbol() == 'n') capturedBlack.push_back(new Knight('n'));
-        else if (piece->getSymbol() == 'b') capturedBlack.push_back(new Bishop('b'));
-        else if (piece->getSymbol() == 'q') capturedBlack.push_back(new Queen('q'));
-        else if (piece->getSymbol() == 'p') capturedBlack.push_back(new Pawn('p'));
-    }
+    // // copy the captured Black pieces from the other board (don't need to clone (deep copy) as Tile-specific variables don't matter (already captured))
+    // for (auto* piece : other.capturedBlack) {
+    //     if (piece->getSymbol() == 'r') capturedBlack.push_back(new Rook('r')); // don't need to clone (deep copy) as Tile-specific variables don't matter (already captured)
+    //     else if (piece->getSymbol() == 'n') capturedBlack.push_back(new Knight('n'));
+    //     else if (piece->getSymbol() == 'b') capturedBlack.push_back(new Bishop('b'));
+    //     else if (piece->getSymbol() == 'q') capturedBlack.push_back(new Queen('q'));
+    //     else if (piece->getSymbol() == 'p') capturedBlack.push_back(new Pawn('p'));
+    // }
 
-    // copy the captured White pieces from the other Board
-    for (auto* piece : other.capturedWhite) {
-        if (piece->getSymbol() == 'R') capturedWhite.push_back(new Rook('R'));
-        else if (piece->getSymbol() == 'N') capturedWhite.push_back(new Knight('N'));
-        else if (piece->getSymbol() == 'B') capturedWhite.push_back(new Bishop('B'));
-        else if (piece->getSymbol() == 'Q') capturedWhite.push_back(new Queen('Q'));
-        else if (piece->getSymbol() == 'P') capturedWhite.push_back(new Pawn('P'));
-    }
+    // // copy the captured White pieces from the other Board
+    // for (auto* piece : other.capturedWhite) {
+    //     if (piece->getSymbol() == 'R') capturedWhite.push_back(new Rook('R'));
+    //     else if (piece->getSymbol() == 'N') capturedWhite.push_back(new Knight('N'));
+    //     else if (piece->getSymbol() == 'B') capturedWhite.push_back(new Bishop('B'));
+    //     else if (piece->getSymbol() == 'Q') capturedWhite.push_back(new Queen('Q'));
+    //     else if (piece->getSymbol() == 'P') capturedWhite.push_back(new Pawn('P'));
+    // }
 
     return *this;
 }
@@ -165,8 +165,8 @@ Board &Board::operator=(Board &&other) {
     // clear the lists of the active and captured pieces on the Board
     activeWhite.clear();
     activeBlack.clear();
-    capturedBlack.clear();
-    capturedWhite.clear();
+    // capturedBlack.clear();
+    // capturedWhite.clear();
 
     // rest is the same as the Move Constructor
     // initialized values from the MIL
@@ -176,8 +176,8 @@ Board &Board::operator=(Board &&other) {
     blackKing = other.blackKing;
     activeWhite = move(other.activeWhite);
     activeBlack = move(other.activeBlack);
-    capturedBlack = move(other.capturedBlack);
-    capturedWhite = move(other.capturedWhite);
+    // capturedBlack = move(other.capturedBlack);
+    // capturedWhite = move(other.capturedWhite);
 
     other.theBoard = nullptr;
     whiteKing = nullptr;
@@ -308,10 +308,10 @@ char Board::makeMove(pair<int, int> from, pair<int, int> to, char promoSymbol) {
     // check if the Tile being removed was a Piece
     if ((removedTile != ' ') || (removedTile != '_')) {
         if (islower(removedTile)) {
-            capturedBlack.push_back(getTile(to));
+            //capturedBlack.push_back(getTile(to));
         }
         else if (isupper(removedTile)) {
-            capturedWhite.push_back(getTile(to));
+            //capturedWhite.push_back(getTile(to));
         }
     }
 
@@ -368,12 +368,12 @@ char Board::makeMove(pair<int, int> from, pair<int, int> to, char promoSymbol) {
         int direction = (from.first < to.first) ? 1 : -1;
 
         if (initialTile == 'p') {
-            capturedWhite.push_back(getTile({(from.first + direction), from.second}));
+            //capturedWhite.push_back(getTile({(from.first + direction), from.second}));
             indicator = 'e'; // black en passant indicator
         }
         
         else {
-            capturedBlack.push_back(getTile({(from.first + direction), from.second}));
+            //capturedBlack.push_back(getTile({(from.first + direction), from.second}));
             indicator = 'E'; // white en passant indicator
         }
 

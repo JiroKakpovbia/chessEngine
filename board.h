@@ -15,8 +15,8 @@ class Board {
     Tile* blackKing;
     vector<Tile*> activeWhite;
     vector<Tile*> activeBlack;
-    vector<Tile*> capturedBlack;
-    vector<Tile*> capturedWhite;
+    //vector<Tile*> capturedBlack;
+    //vector<Tile*> capturedWhite;
   public:
     Board();
     virtual ~Board();
