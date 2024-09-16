@@ -32,7 +32,6 @@ vector<pair<int, int>> Tile::possibleChecks(const pair<int, int> &posn, Board &b
     vector<pair<int, int>> possibleChecks; // Define variable for possible checks
     vector<pair<int, int>> possiblemoves = possibleMoves(posn, board); // Define variable for possible moves
     vector<pair<int, int>> possiblecaptures; // Define variable for possible captures
-    Tile *piece; // Define variable to store what is at that tile
     int currTurn = board.getCurrTurn(); // Define a variable to store who's turn it is
     char opponentKing = (currTurn % 2 == 0) ? 'k' : 'K'; // Define variable for the opponent King
 
@@ -41,9 +40,10 @@ vector<pair<int, int>> Tile::possibleChecks(const pair<int, int> &posn, Board &b
         Board tempboard = board;
 
         // Simulate the move
-        piece = tempboard.getTile(move);
+        Tile *piece = tempboard.getTile(move); // Define variable to store what is at that tile
+        char symbol = piece->getSymbol(); // Define variable to store the symbol of the tile
         tempboard.removeTile(move);
-        tempboard.addTile(piece->getSymbol(), move);
+        tempboard.addTile(symbol, move);
         tempboard.removeTile(posn);
 
         // Iterate through each possible capture and determine if a possible capture is opponentKing
@@ -62,14 +62,14 @@ vector<pair<int, int>> Tile::possibleChecks(const pair<int, int> &posn, Board &b
     return possibleChecks;
 }
 
-bool Tile::simulateMove(const pair<int, int> &posn1, const pair<int, int> &posn2, const Board &board, Tile* piece) {
+bool Tile::simulateMove(const pair<int, int> &posn1, const pair<int, int> &posn2, Board &board) {
     if (isSimulating) return false; // prevents infinite recursion
 
     Board tempboard = board; // create temporary board as to not modify the original
 
     // simulate the move on a temporary board
     tempboard.removeTile(posn2);
-    piece = tempboard.getTile(posn1);
+    Tile *piece = tempboard.getTile(posn1);
     tempboard.addTile(piece->getSymbol(), posn2);
     tempboard.removeTile(posn1);
 

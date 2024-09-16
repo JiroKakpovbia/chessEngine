@@ -2,6 +2,14 @@
 #include <iostream>
 using namespace std;
 
+Tile* King::clone() {
+    King *newKing = new King(getSymbol());
+    newKing->setMoved(getMoved());
+    newKing->setJustMoved(getJustMoved());
+    newKing->setSimulating(getSimulating());
+    return newKing;
+}
+
 vector<pair<int, int>> King::possibleMoves(const pair<int, int> &posn, Board &board){
     // Define variables
     vector<pair<int, int>> possibleMoves; // Define variable for possible moves
@@ -24,7 +32,7 @@ vector<pair<int, int>> King::possibleMoves(const pair<int, int> &posn, Board &bo
         piece = board.getTile(posn2); // Get the tile stored at posn2 of the board
 
         // simulate the move on a temporary board, check if it leaves the player in check
-        incheck = simulateMove(posn, posn2, board, piece);\
+        incheck = simulateMove(posn, posn2, board);
 
         if (!incheck){
             if(piece->getSymbol() != ' ' && piece->getSymbol() != '_'){
@@ -83,7 +91,7 @@ void King::possibleCastles(const pair<int, int> &posn, Board &board, vector<pair
                         piece = board.getTile(posn);
                         // Ensure that the king is not in check in the current position, posn + 1, posn + 2 
                         for(int i = 0; i <= 2; i++){
-                            incheck = simulateMove({posn.first, posn.second}, {posn.first + i, posn.second}, board, piece);
+                            incheck = simulateMove({posn.first, posn.second}, {posn.first + i, posn.second}, board);
                             if(incheck){
                                 break;
                             } else if (i == 2 && !incheck){
@@ -120,7 +128,7 @@ void King::possibleCastles(const pair<int, int> &posn, Board &board, vector<pair
                             piece = board.getTile(posn);
                             // Ensure that the king is not in check in the current position, posn - 1, posn - 2 
                             for(int i = 0; i <= 2; i++){
-                                incheck = simulateMove({posn.first, posn.second}, {posn.first - i, posn.second}, board, piece);
+                                incheck = simulateMove({posn.first, posn.second}, {posn.first - i, posn.second}, board);
                                 if(incheck){
                                     break;
                                 } else if (i == 2 && !incheck){

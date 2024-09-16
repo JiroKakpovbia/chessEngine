@@ -2,6 +2,15 @@
 #include <iostream>
 using namespace std;
 
+Tile* Pawn::clone() {
+    Pawn *newPawn = new Pawn(getSymbol());
+    newPawn->setMoved(getMoved());
+    newPawn->setJustMoved(getJustMoved());
+    newPawn->setJustMoved2(getJustMoved2());
+    newPawn->setSimulating(getSimulating());
+    return newPawn;
+}
+
 vector<pair<int, int>> Pawn::possibleMoves(const pair<int, int> &posn, Board &board){
     // Define variables
     vector<pair<int, int>> possibleMoves; // Define variable for possible moves
@@ -33,7 +42,7 @@ vector<pair<int, int>> Pawn::possibleMoves(const pair<int, int> &posn, Board &bo
         piece = board.getTile(posn2); // Get the tile stored at posn2 of the board
 
         // Simulate the move on a temporary board
-        incheck = simulateMove(posn, posn2, board, piece);
+        incheck = simulateMove(posn, posn2, board);
 
         if (!incheck) {
             if (dir.first != 0) { // Possible captures
@@ -92,7 +101,7 @@ void Pawn::possibleEnPassant(const pair<int, int> &posn, Board &board, vector<pa
         posn2.second += dir.second;
         
         // Simulate the move on a temporary board
-        incheck = simulateMove(posn, posn2, board, piece);
+        incheck = simulateMove(posn, posn2, board);
 
         posn2.second = posn.second;
 

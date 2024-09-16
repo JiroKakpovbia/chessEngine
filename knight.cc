@@ -2,6 +2,14 @@
 #include <iostream>
 using namespace std;
 
+Tile* Knight::clone() {
+    Knight *newKnight = new Knight(getSymbol());
+    newKnight->setMoved(getMoved());
+    newKnight->setJustMoved(getJustMoved());
+    newKnight->setSimulating(getSimulating());
+    return newKnight;
+}
+
 vector<pair<int, int>> Knight::possibleMoves(const pair<int, int> &posn, Board &board){
     // Define variables
     vector<pair<int, int>> possibleMoves; // Define variable for possible moves
@@ -24,7 +32,7 @@ vector<pair<int, int>> Knight::possibleMoves(const pair<int, int> &posn, Board &
         piece = board.getTile(posn2); // Get the tile stored at posn2 of the board
 
         // simulate the move on a temporary board, check if it leaves the player in check
-        incheck = simulateMove(posn, posn2, board, piece);
+        incheck = simulateMove(posn, posn2, board);
 
         if(!incheck){
             if(piece->getSymbol() != ' ' && piece->getSymbol() != '_'){

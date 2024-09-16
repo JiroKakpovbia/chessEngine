@@ -5,10 +5,9 @@
 using namespace std;
 
 class Bishop : public Tile {
-    bool justMoved = false;
   public:
     Bishop(char symbol) : Tile{symbol} {};
-    void setJustMoved(bool torf) override { justMoved = torf; }
+    Tile* clone() override;
     vector<pair<int, int>> possibleMoves(const pair<int, int> &posn, Board &board) override;
 };
 #endif

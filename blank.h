@@ -7,6 +7,10 @@ using namespace std;
 class Blank : public Tile {
   public:
     Blank(char symbol) : Tile{symbol} {};
+    bool getJustMoved() override { return false; }
+    Tile* clone() override {
+      return new Blank(getSymbol());
+    }
     vector<pair<int, int>> possibleMoves(const pair<int, int> &posn, Board &board) override {
       vector<pair<int, int>> vec;
       return vec;
@@ -19,6 +23,6 @@ class Blank : public Tile {
       vector<pair<int, int>> vec;
       return vec;
     }
-    bool simulateMove(const pair<int, int> &posn1, const pair<int, int> &posn2, const Board &board, Tile* piece) override { return false; }
+    bool simulateMove(const pair<int, int> &posn1, const pair<int, int> &posn2, Board &board, Tile* piece) override { return false; }
 };
 #endif

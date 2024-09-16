@@ -9,6 +9,7 @@ class King : public Tile {
     void possibleCastles(const pair<int, int> &posn, Board &board, vector<pair<int, int>> &possiblemoves);
   public:
     King(char symbol) : Tile{symbol} {};
+    Tile* clone() override;
     void setJustMoved(bool torf) override { 
         justMoved = torf;
         if(!getMoved() && torf){

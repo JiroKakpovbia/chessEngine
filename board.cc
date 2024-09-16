@@ -61,15 +61,15 @@ Board::Board(const Board &other) : currTurn{other.currTurn} {
     // copy the other Board
     for (int x = 0; x < other.boardSize; ++x) {
 		for (int y = 0; y < other.boardSize; ++y) {
-            addTile(other.getTile({x, y})->getSymbol(), {x, y}); // copy each tile from the other Board
+            theBoard->at(x).at(y) = other.getTile({x,y})->clone(); // clone (deep copy) each tile from the other Board
             if (other.getTile({x, y})->getSymbol() == 'K')
-                whiteKing = getTile({x, y});
+                whiteKing = theBoard->at(x).at(y); // track white King
             else if (other.getTile({x, y})->getSymbol() == 'k')
-                blackKing = getTile({x, y});
+                blackKing = theBoard->at(x).at(y); // track black King
 		}
 	}
 
-    // copy the captured Black pieces from the other board
+    // copy the captured Black pieces from the other board (don't need to clone (deep copy) as Tile-specific variables don't matter (already captured))
     for (auto* piece : other.capturedBlack) {
         if (piece->getSymbol() == 'r') capturedBlack.push_back(new Rook('r'));
         else if (piece->getSymbol() == 'n') capturedBlack.push_back(new Knight('n'));
@@ -119,19 +119,19 @@ Board &Board::operator=(const Board &other) {
     theBoard = new vector<vector<Tile*>>(boardSize, vector<Tile*>(boardSize, nullptr));
 
     // copy the other Board
-    for (int x = 0; x < boardSize; ++x) {
-		for (int y = 0; y < boardSize; ++y) {
-            addTile(other.getTile({x, y})->getSymbol(), {x, y}); // copy each tile from the other Board
+    for (int x = 0; x < other.boardSize; ++x) {
+		for (int y = 0; y < other.boardSize; ++y) {
+            theBoard->at(x).at(y) = other.getTile({x,y})->clone(); // clone (deep copy) each tile from the other Board
             if (other.getTile({x, y})->getSymbol() == 'K')
-                whiteKing = getTile({x, y});
+                whiteKing = theBoard->at(x).at(y); // track white King
             else if (other.getTile({x, y})->getSymbol() == 'k')
-                blackKing = getTile({x, y});
+                blackKing = theBoard->at(x).at(y); // track black King
 		}
 	}
 
-    // copy the captured Black pieces from the other board
+    // copy the captured Black pieces from the other board (don't need to clone (deep copy) as Tile-specific variables don't matter (already captured))
     for (auto* piece : other.capturedBlack) {
-        if (piece->getSymbol() == 'r') capturedBlack.push_back(new Rook('r'));
+        if (piece->getSymbol() == 'r') capturedBlack.push_back(new Rook('r')); // don't need to clone (deep copy) as Tile-specific variables don't matter (already captured)
         else if (piece->getSymbol() == 'n') capturedBlack.push_back(new Knight('n'));
         else if (piece->getSymbol() == 'b') capturedBlack.push_back(new Bishop('b'));
         else if (piece->getSymbol() == 'q') capturedBlack.push_back(new Queen('q'));
@@ -190,7 +190,7 @@ Board &Board::operator=(Board &&other) {
 void Board::addTile(char symbol, pair<int, int> tileCoords) {
     // remove the Tile at tileCoords on the Board
     if (getTile(tileCoords)) {
-        delete getTile(tileCoords);
+        delete theBoard->at(tileCoords.first).at(tileCoords.second);
         theBoard->at(tileCoords.first).at(tileCoords.second) = nullptr;
     }
 
