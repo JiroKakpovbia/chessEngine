@@ -71,79 +71,53 @@ void King::possibleCastles(const pair<int, int> &posn, Board &board, vector<pair
     // Define variables
     pair<int, int> posn2; // Define variable for posn2 to check moves
     vector<pair<int, int>> directions = {{1, 0}, {-1, 0}}; // Only directions needed for castling
-    Tile *piece = board.getTile(posn);
     int currTurn = board.getCurrTurn(); // Define a variable to store who's turn it is
     bool incheck = false; // Define a variable to store whether you are in check once a simulated move is made
 
-    // Check if the right castle is available
-    while(true){
-        // Ensure that our rook is to the right of the king
-        piece = board.getTile({posn.first + 3, posn.second});
-        if((currTurn % 2 == 0 && piece->getSymbol() == 'R') || (currTurn % 2 == 1 && piece->getSymbol() == 'r')){ // Determine the turn
-            if(!piece->getMoved()){
-                // Ensure that there are no pieces between the king and the rook
-                piece = board.getTile({posn.first + 1, posn.second});
-                if(piece->getSymbol() == ' ' || piece->getSymbol() == '_'){
-                    piece = board.getTile({posn.first + 2, posn.second});
-                    if(piece->getSymbol() == ' ' || piece->getSymbol() == '_'){
-                        piece = board.getTile(posn);
-                        // Ensure that the king is not in check in the current position, posn + 1, posn + 2 
-                        for(int i = 0; i <= 2; i++){
-                            incheck = simulateMove({posn.first, posn.second}, {posn.first + i, posn.second}, board);
-                            if(incheck){
-                                break;
-                            } else if (i == 2 && !incheck){
-                                posn2.first = posn.first + 2;
-                                posn2.second = posn.second;
-                                // Pushback posn2 to possiblemoves
-                                possiblemoves.push_back(posn2);
-                                // Break the loop
-                                break;
-                            }
-                        }
-                    
+    // Check for Right Castle
+    // Ensure that our rook is to the right of the king
+    Tile* rook = board.getTile({posn.first + 3, posn.second}); // store rook position
+    if ((currTurn % 2 == 0 && rook->getSymbol() == 'R') || (currTurn % 2 == 1 && rook->getSymbol() == 'r')) { // Determine the turn
+        if(!rook->getMoved()) {
+            // Ensure that there are no pieces between the king and the rook
+            Tile* space1 = board.getTile({posn.first + 1, posn.second});
+            Tile* space2 = board.getTile({posn.first + 2, posn.second});
+
+            if ((space1->getSymbol() == ' ' || space1->getSymbol() == '_') && (space2->getSymbol() == ' ' || space2->getSymbol() == '_')) {
+                for (int i = 0; i <= 2; i++) { // Ensure that the king is not in check in the current position, posn + 1, posn + 2 
+                    incheck = simulateMove(posn, {posn.first + i, posn.second}, board);
+                    if(incheck) break;
+                    else if (i == 2 && !incheck) {
+                        posn2 = {posn.first + 2, posn.second};
+                        possiblemoves.push_back(posn2); // Pushback posn2 to possiblemoves (valid move)
+                        break;
                     }
                 }
             }
         }
-
-        break;
     }
 
-    // Check if left castle is available
-    while(true){
-        // Ensure that our rook is to the right of the king
-        piece = board.getTile({posn.first - 4, posn.second});
-        if((currTurn % 2 == 0 && piece->getSymbol() == 'R') || (currTurn % 2 == 1 && piece->getSymbol() == 'r')){ // Determine the turn
-            if(!piece->getMoved()){
-                // Ensure that there are no pieces between the king and the rook
-                piece = board.getTile({posn.first - 1, posn.second});
-                if(piece->getSymbol() == ' ' || piece->getSymbol() == '_'){
-                    piece = board.getTile({posn.first - 2, posn.second});
-                    if(piece->getSymbol() == ' ' || piece->getSymbol() == '_'){
-                        piece = board.getTile({posn.first - 3, posn.second});
-                        if(piece->getSymbol() == ' ' || piece->getSymbol() == '_'){
-                            piece = board.getTile(posn);
-                            // Ensure that the king is not in check in the current position, posn - 1, posn - 2 
-                            for(int i = 0; i <= 2; i++){
-                                incheck = simulateMove({posn.first, posn.second}, {posn.first - i, posn.second}, board);
-                                if(incheck){
-                                    break;
-                                } else if (i == 2 && !incheck){
-                                    posn2.first = posn.first - 2;
-                                    posn2.second = posn.second;
-                                    // Pushback posn2 to possiblemoves
-                                    possiblemoves.push_back(posn2);
-                                    // Break the loop
-                                    break;
-                                }
-                            }
-                        }
+    // Check for Left Castle
+    // Ensure that our rook is to the right of the king
+    rook = board.getTile({posn.first - 4, posn.second}); // store rook position
+    if((currTurn % 2 == 0 && rook->getSymbol() == 'R') || (currTurn % 2 == 1 && rook->getSymbol() == 'r')){ // Determine the turn
+        if(!rook->getMoved()){
+            // Ensure that there are no pieces between the king and the rook
+            Tile* space1 = board.getTile({posn.first - 1, posn.second});
+            Tile* space2 = board.getTile({posn.first - 2, posn.second});
+            Tile* space3 = board.getTile({posn.first - 3, posn.second});
+
+            if ((space1->getSymbol() == ' ' || space1->getSymbol() == '_') && (space2->getSymbol() == ' ' || space2->getSymbol() == '_') && (space3->getSymbol() == ' ' || space3->getSymbol() == '_')) {
+                for (int i = 0; i <= 2; i++) { // Ensure that the king is not in check in the current position, posn + 1, posn + 2, posn + 3
+                    incheck = simulateMove(posn, {posn.first + i, posn.second}, board);
+                    if(incheck) break;
+                    else if (i == 2 && !incheck) {
+                        posn2 = {posn.first - 2, posn.second};
+                        possiblemoves.push_back(posn2); // Pushback posn2 to possiblemoves (valid move)
+                        break;
                     }
                 }
             }
         }
-
-        break;
     }
 }

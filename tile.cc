@@ -12,9 +12,9 @@ vector<pair<int, int>> Tile::possibleMoves(const pair<int, int> &posn, Board &bo
 
 vector<pair<int, int>> Tile::possibleCaptures(const pair<int, int> &posn, Board &board) {
     vector<pair<int, int>> possibleCaptures; // define variable for possible captures
-    isSimulating = true;
+    setSimulating(true); // avoid infinite recursion
     vector<pair<int, int>> pMoves = possibleMoves(posn, board); // determine the possible moves
-    isSimulating = false;
+    setSimulating(false); // avoid infinite recursion
 
     // determine which of the possible moves results in the capture of a piece
     for (auto m : pMoves) {
@@ -65,14 +65,15 @@ vector<pair<int, int>> Tile::possibleChecks(const pair<int, int> &posn, Board &b
 bool Tile::simulateMove(const pair<int, int> &posn1, const pair<int, int> &posn2, Board &board) {
     if (isSimulating) return false; // prevents infinite recursion
 
-    Board tempboard = board; // create temporary board as to not modify the original
-    Tile *piece = tempboard.getTile(posn1);
+    Board temp = board; // create temporary board as to not modify the original
+    Tile *piece = temp.getTile(posn1);
+    char symbol = piece->getSymbol(); // the piece's symbol
 
     // simulate the move on a temporary board
-    tempboard.removeTile(posn2);
-    tempboard.addTile(piece->getSymbol(), posn2);
-    tempboard.removeTile(posn1);
+    temp.removeTile(posn2);
+    temp.addTile(symbol, posn2);
+    temp.removeTile(posn1);
 
     // return true if the player is in check, false otherwise
-    return (tempboard.inCheck(tempboard));
+    return (temp.inCheck(temp));
 }
