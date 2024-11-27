@@ -1,6 +1,45 @@
 # chessEngine
-The CS246 Final Project - Chess + Enhancements
+This is a Chess engine created using C++. It was created as a final project in the University of Waterloo's CS 246 (Object-Oriented Software Development) course offered in Spring 2024. My other teammates during the development of this project were Adam Muinuddin and Liam Knox.
+
+The source code is unavailable in this public reposity as public access would violate academic policies. If you would like to see the source code for this project, please email me at jjkakpov@uwaterloo.ca and I will share the private repository.
+
+Below, you can see the documentaton containing the regulations for this assignment. Furthermore, there is a list of enhancements that I made individually after the assingment deadline had passed. Finally, the rules and instructions on how to play this Chess Engine are found at the end of this document. Note that the instructions are different than the one's specified in the assignment documentation.
+
+Executing the "chess" file in the repository will start a new game. Have fun!
+
+
+# Documentation
+The final project guidelines for the CS 246 Spring 2024 offering that were followed can be accessed here.
+
+The project guidelines specifically regarding Chess and instructions on how to play the game are here. Please note that modifications have been made, so the updated instructions can be found below.
+
+A UML Class Diagram representing our software design for this Chess game can be found here.
+
+
+# Enhancements
+1. Updated Pawn promotion
+  - Can no longer promote at any square on the board
+  - Pawn promotion works for both the Player and the Computer
+  - Cannot promote to a piece of the opponent's colour
+  - Turn switches to the opponent once a piece ia promoted
+2. Modified Graphics to update with the Text display regarding Setup Mode and EnPassant
+3. Added a "Clear" option in Setup Mode to clear the board, removing every piece present
+4. Eliminated Computer move commands, making Computers move automatically
+5. Added Tie/Stalemate
+  - Added stalemate with no possible moves available for either player
+  - Added tie by insufficient pieces on the board
+6. Fixed the  Check detection system
+  - Detection system when someone is in check, displaying in text and graphical display
+  - Computers no longer make moves that put themselves in check
+  - Double check is now detected, occurs when a piece is in check by 2 opposing pieces
+7. Fixed long castling with Black pieces, now is possible
+    Addressed excessive memory leaks, only leaks remaining are due to the XQuartz/XWindow functionalities
+9. Added Blank tile subclass to make the Tile class abstract
+10. Updated resign command to now prompt the user to play another game, ressetting the board as well
 ____________________________________________________________________
+
+
+# Rules and Instructions
 Welcome to Chess! Please choose from the following commands:
 
 'game \<white-player\> \<black-player\>' starts a new game. The parameters \<white-player\> and \<black-player\> can be either human or computer[1-4].
@@ -35,26 +74,3 @@ In the case of a computer player, the computer will make its move on its own.
 'done' exits setup mode.
 
 **Remember:** White pieces = UPPERCASE, Black pieces = lowercase
-
-____________________________________________________________________
-**Enhancements**:
-1. Updated Pawn promotion
-  - Can no longer promote at any square on the board
-  - Pawn promotion works for both the Player and the Computer
-  - Cannot promote to a piece of the opponent's colour
-  - Turn switches to the opponent once a piece ia promoted
-2. Modified Graphics to update with the Text display regarding Setup Mode and EnPassant
-3. Added a "Clear" option in Setup Mode to clear the board, removing every piece present
-4. Eliminated Computer move commands, making Computers move automatically
-5. Added Tie/Stalemate
-  - Added stalemate with no possible moves available for either player
-  - Added tie by insufficient pieces on the board
-6. Fixed the  Check detection system
-  - Detection system when someone is in check, displaying in text and graphical display
-  - Computers no longer make moves that put themselves in check
-  - Double check is now detected, occurs when a piece is in check by 2 opposing pieces
-7. Fixed long castling with Black pieces, now is possible
-    Addressed excessive memory leaks, only leaks remaining are due to the XQuartz/XWindow functionalities
-9. Added Blank tile subclass to make the Tile class abstract
-10. Updated resign command to now prompt the user to play another game, ressetting the board as well
-____________________________________________________________________
