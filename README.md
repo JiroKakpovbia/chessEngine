@@ -9,11 +9,11 @@ Executing the "chess" file in the repository will start a new game. Have fun!
 
 
 # Documentation
-The final project guidelines for the CS 246 Spring 2024 offering that were followed can be accessed here.
+The final project guidelines for the CS 246 Spring 2024 offering that were followed can be accessed [here](./docs/project_guidelines.pdf).
 
-The project guidelines specifically regarding Chess and instructions on how to play the game are here. Please note that modifications have been made, so the updated instructions can be found below.
+The project guidelines specifically regarding Chess and instructions on how to play the game are [here](./docs/chess.pdf). Please note that modifications have been made, so the updated instructions can be found below.
 
-A UML Class Diagram representing our software design for this Chess game can be found here.
+A UML Class Diagram representing our software design for this Chess game can be found [here](./docs/uml_final.pdf).
 
 
 # Enhancements
