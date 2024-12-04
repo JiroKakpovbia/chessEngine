@@ -17,25 +17,24 @@ A UML Class Diagram representing our software design for this Chess game can be 
 
 
 # Enhancements
-1. Updated Pawn promotion
-  - Can no longer promote at any square on the board
-  - Pawn promotion works for both the Player and the Computer
-  - Cannot promote to a piece of the opponent's colour
-  - Turn switches to the opponent once a piece ia promoted
-2. Modified Graphics to update with the Text display regarding Setup Mode and EnPassant
-3. Added a "Clear" option in Setup Mode to clear the board, removing every piece present
-4. Eliminated Computer move commands, making Computers move automatically
-5. Added Tie/Stalemate
-  - Added stalemate with no possible moves available for either player
-  - Added tie by insufficient pieces on the board
-6. Fixed the  Check detection system
-  - Detection system when someone is in check, displaying in text and graphical display
-  - Computers no longer make moves that put themselves in check
-  - Double check is now detected, occurs when a piece is in check by 2 opposing pieces
-7. Fixed long castling with Black pieces, now is possible
-    Addressed excessive memory leaks, only leaks remaining are due to the XQuartz/XWindow functionalities
-9. Added Blank tile subclass to make the Tile class abstract
-10. Updated resign command to now prompt the user to play another game, ressetting the board as well
+1. Can no longer promote at any square on the board
+2. Pawn promotion works for both the Player and the Computer
+3. Cannot promote to a piece of the opponent's colour
+4. Turn switches to the opponent once a piece ia promoted
+5. Modified Graphics to update with the Text display regarding Setup Mode and EnPassant
+6. Added a "Clear" option in Setup Mode to clear the board, removing every piece present
+7. Eliminated Computer move commands, making Computers move automatically
+8. Added Tie/Stalemate
+9. Added stalemate with no possible moves available for either player
+10. Added tie by insufficient pieces on the board
+11. Fixed the  Check detection system
+12. Detection system when someone is in check, displaying in text and graphical display
+13. Computers no longer make moves that put themselves in check
+14. Double check is now detected, occurs when a piece is in check by 2 opposing pieces
+15. Fixed long castling with Black pieces, now is possible
+16. Addressed excessive memory leaks, only leaks remaining are due to the XQuartz/XWindow functionalities
+17. Added Blank tile subclass to make the Tile class abstract
+18. Updated resign command to now prompt the user to play another game, ressetting the board as well
 ____________________________________________________________________
 
 
