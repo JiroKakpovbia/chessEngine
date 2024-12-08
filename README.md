@@ -36,6 +36,7 @@ A UML Class Diagram representing our software design for this Chess game can be 
 17. Added Blank tile subclass to make the Tile class abstract
 18. Updated resign command to now prompt the user to play another game, ressetting the board as well
 19. Fixed issue where Pawns would jump over pieces in double forward move
+20. Added images for each of the pieces in the graphical display (credit to [PNGEgg](https://www.pngegg.com/en/png-pdjoy) for the images)
 ____________________________________________________________________
 
 
