@@ -1,7 +1,7 @@
 # chessEngine
 This is a Chess engine created using C++. It was created as a final project in the University of Waterloo's CS 246 (Object-Oriented Software Development) course offered in Spring 2024. My other teammates during the development of this project were Adam Muinuddin and Liam Knox.
 
-The source code is unavailable in this public reposity as public access would violate academic policies. If you would like to see the source code for this project, please email me at jjkakpov@uwaterloo.ca and I will share the private repository.
+The source code and our final Design Document are both unavailable in this public reposity as public access would violate academic policies. If you would like to see the source code or the final Design document for this project, please email me at jjkakpov@uwaterloo.ca.
 
 Below, you can see the documentation containing the regulations for this assignment. Furthermore, there is a list of enhancements that I made individually after the assingment deadline had passed. Finally, the rules and instructions on how to play this Chess Engine are found at the end of this document. Note that the instructions are different than the one's specified in the assignment documentation.
 
