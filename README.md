@@ -3,7 +3,7 @@ This is a Chess engine created using C++. It was created as a final project in t
 
 The source code is unavailable in this public reposity as public access would violate academic policies. If you would like to see the source code for this project, please email me at jjkakpov@uwaterloo.ca and I will share the private repository.
 
-Below, you can see the documentaton containing the regulations for this assignment. Furthermore, there is a list of enhancements that I made individually after the assingment deadline had passed. Finally, the rules and instructions on how to play this Chess Engine are found at the end of this document. Note that the instructions are different than the one's specified in the assignment documentation.
+Below, you can see the documentation containing the regulations for this assignment. Furthermore, there is a list of enhancements that I made individually after the assingment deadline had passed. Finally, the rules and instructions on how to play this Chess Engine are found at the end of this document. Note that the instructions are different than the one's specified in the assignment documentation.
 
 Executing the "chess" file in the repository will start a new game. Have fun!
 
