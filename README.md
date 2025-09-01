@@ -1,4 +1,5 @@
 # chessEngine
+<img width="1536" height="724" alt="Screenshot 2025-09-01 at 6 44 19 PM" src="https://github.com/user-attachments/assets/1bf3f050-32e8-4848-a165-820028a81db4" />
 This is a Chess engine created using C++. It was created as a final project in the University of Waterloo's CS 246 (Object-Oriented Software Development) course offered in Spring 2024. My other teammates during the development of this project were Adam Muinuddin and Liam Knox.
 
 The source code and our final Design Document are both unavailable in this public reposity as public access would violate academic policies. If you would like to see the source code or the final Design document for this project, please email me at jjkakpov@uwaterloo.ca.
@@ -37,13 +38,15 @@ A UML Class Diagram representing our software design for this Chess game can be 
 18. Updated resign command to now prompt the user to play another game, ressetting the board as well
 19. Fixed issue where Pawns would jump over pieces in double forward move
 20. Added images for each of the pieces in the graphical display (credit to [PNGEgg](https://www.pngegg.com/en/png-pdjoy) for the images)
+21. Fixed 'History' class, integrating separate histories for each player
+22. Added command to display player's previous moves
 ____________________________________________________________________
 
 
 # Rules and Instructions
 Welcome to Chess! Please choose from the following commands:
 
-'game \<white-player\> \<black-player\>' starts a new game. The parameters \<white-player\> and \<black-player\> can be either human or computer[1-4].
+'game \<white-player\> \<black-player\>' starts a new game. The parameters \<white-player\> and \<black-player\> can be either human or computer[1-3].
   - eg. 'game human computer2' starts a game with the White player being Human and the Black player being a Computer.
 
 'resign' concedes the game to your opponent. This is the only way, outside of winning or drawing the game, to end a game.
@@ -73,5 +76,7 @@ In the case of a computer player, the computer will make its move on its own.
 'clear' removes every piece on the board.
 
 'done' exits setup mode.
+
+'history' outputs the current player's move history.
 
 **Remember:** White pieces = UPPERCASE, Black pieces = lowercase
