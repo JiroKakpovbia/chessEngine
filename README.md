@@ -1,5 +1,5 @@
 # chessEngine
-<img width="1536" height="724" alt="Chess Engine Preview" src="./preview.png" />
+![image](./preview.png)
 This is a Chess engine created using C++. It was created as a final project in the University of Waterloo's CS 246 (Object-Oriented Software Development) course offered in Spring 2024. My other teammates during the development of this project were Adam Muinuddin and Liam Knox.
 
 The source code and our final Design Document are both unavailable in this public reposity as public access would violate academic policies. If you would like to see the source code or the final Design document for this project, please email me at jjkakpov@uwaterloo.ca.
